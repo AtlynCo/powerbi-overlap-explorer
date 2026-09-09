@@ -1,0 +1,130 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "5bbfc9be3da326363755",
+  "position": {
+    "x": 984,
+    "y": 516,
+    "z": 4,
+    "width": 432,
+    "height": 360,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Entity ID"
+                }
+              },
+              "queryRef": "FeatureAdoption.Entity ID",
+              "nativeQueryRef": "Entity ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Set Name"
+                }
+              },
+              "queryRef": "FeatureAdoption.Set Name",
+              "nativeQueryRef": "Set Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Cohort"
+                }
+              },
+              "queryRef": "FeatureAdoption.Cohort",
+              "nativeQueryRef": "Cohort"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Feature highlight signal"
+                }
+              },
+              "queryRef": "FeatureAdoption.Feature highlight signal",
+              "nativeQueryRef": "Feature highlight signal"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Membership rows / highlight signal (not weights)'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

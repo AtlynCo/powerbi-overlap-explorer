@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "CustomerProducts",
+  "displayName": "Customer / product overlap",
+  "displayOption": "FitToPage",
+  "height": 900,
+  "width": 1440,
+  "visualInteractions": [
+    {
+      "source": "2aeb180975828657ca3e",
+      "target": "ba4e9cfc05a8d5294984",
+      "type": "HighlightFilter"
+    },
+    {
+      "source": "8616c0138923393aefe0",
+      "target": "ba4e9cfc05a8d5294984",
+      "type": "DataFilter"
+    },
+    {
+      "source": "ba4e9cfc05a8d5294984",
+      "target": "8616c0138923393aefe0",
+      "type": "DataFilter"
+    }
+  ]
+}

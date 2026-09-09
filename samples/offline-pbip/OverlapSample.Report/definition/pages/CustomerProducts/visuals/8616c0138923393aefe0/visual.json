@@ -1,0 +1,130 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "8616c0138923393aefe0",
+  "position": {
+    "x": 984,
+    "y": 516,
+    "z": 4,
+    "width": 432,
+    "height": 360,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Memberships"
+                    }
+                  },
+                  "Property": "Entity ID"
+                }
+              },
+              "queryRef": "Memberships.Entity ID",
+              "nativeQueryRef": "Entity ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Memberships"
+                    }
+                  },
+                  "Property": "Set Name"
+                }
+              },
+              "queryRef": "Memberships.Set Name",
+              "nativeQueryRef": "Set Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Memberships"
+                    }
+                  },
+                  "Property": "Segment"
+                }
+              },
+              "queryRef": "Memberships.Segment",
+              "nativeQueryRef": "Segment"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Memberships"
+                    }
+                  },
+                  "Property": "Highlight signal"
+                }
+              },
+              "queryRef": "Memberships.Highlight signal",
+              "nativeQueryRef": "Highlight signal"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Membership rows / highlight signal (not weights)'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -2,7 +2,8 @@ import { Buffer } from "node:buffer";
 import { readFileSync, writeFileSync } from "node:fs";
 import { deflateSync } from "node:zlib";
 
-const size = 20;
+const size = Number(process.argv[2] ?? 20);
+if (![20, 50, 128, 150, 300].includes(size)) throw new Error("Supported icon/logo sizes: 20, 50, 128, 150, 300.");
 const sampling = 4;
 const svg = readFileSync(new URL("../assets/icon.svg", import.meta.url), "utf8");
 if (!svg.includes('viewBox="0 0 20 20"')) throw new Error("Expected the original 20x20 SVG.");
@@ -33,8 +34,8 @@ for (let y = 0; y < size; y++) {
     const total = [0, 0, 0];
     for (let sy = 0; sy < sampling; sy++) {
       for (let sx = 0; sx < sampling; sx++) {
-        const px = x + (sx + 0.5) / sampling;
-        const py = y + (sy + 0.5) / sampling;
+        const px = (x + (sx + 0.5) / sampling) * 20 / size;
+        const py = (y + (sy + 0.5) / sampling) * 20 / size;
         let color = [255, 255, 255];
         for (const shape of shapes) if (shape.contains(px, py)) color = shape.color;
         color.forEach((value, channel) => { total[channel] += value; });
@@ -75,4 +76,4 @@ const png = Buffer.concat([
   chunk("IDAT", deflateSync(pixels, { level: 9 })),
   chunk("IEND", Buffer.alloc(0))
 ]);
-writeFileSync(new URL("../assets/icon.png", import.meta.url), png);
+writeFileSync(new URL(size === 20 ? "../assets/icon.png" : `../assets/logo-${size}.png`, import.meta.url), png);

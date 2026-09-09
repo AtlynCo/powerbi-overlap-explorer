@@ -1,6 +1,6 @@
 import powerbi from "powerbi-visuals-api";
 import { valueFormatter } from "powerbi-visuals-utils-formattingutils";
-import { LIMITS, MembershipRow } from "./engine";
+import { LIMITS, MembershipRow, isEntityValue, isBlankSet } from "./engine";
 
 export interface ParsedData {
   rows: MembershipRow[];
@@ -21,7 +21,8 @@ export function parseData(
   const entities = categories.filter(column => column.source.roles?.entity);
   const sets = categories.filter(column => column.source.roles?.set);
   const signals = view?.categorical?.values?.filter(column => column.source.roles?.signal) ?? [];
-  if (entities.length !== 1 || sets.length !== 1 || signals.length > 1 || categories.length !== 2) {
+  if (entities.length !== 1 || sets.length !== 1 || signals.length > 1 || categories.length !== 2 ||
+      (view?.categorical?.values?.length ?? 0) !== signals.length) {
     result.error = "Binding";
     return result;
   }
@@ -31,12 +32,26 @@ export function parseData(
   result.received = Math.max(entity.values.length, set.values.length);
   if (entity === set || entity.values.length !== set.values.length ||
       (signal && (signal.values.length !== entity.values.length ||
-        (signal.highlights && signal.highlights.length !== entity.values.length)))) {
+        (signal.highlights !== undefined && (!Array.isArray(signal.highlights) || signal.highlights.length !== entity.values.length))))) {
     result.error = "Shape";
     return result;
   }
   result.highlights = signal?.highlights !== undefined;
+  const formatted = (value: powerbi.PrimitiveValue | undefined, format?: string): string | undefined => {
+    // Text categories are already display text, not numeric measures. Avoid
+    // formatter/key allocations for every repeated long-form membership row.
+    if (typeof value === "string") return value;
+    return !isEntityValue(value) ? undefined
+      : valueFormatter.format(value, format, false, host.locale).slice(0, LIMITS.text);
+  };
   for (let index = 0; index < Math.min(result.received, LIMITS.rows); index++) {
+    const valid = isEntityValue(entity.values[index]) && (isBlankSet(set.values[index]) || isEntityValue(set.values[index]));
+    if (!valid) {
+      // Retain an invalid-row counter slot, not oversized values or arbitrary
+      // objects in the resize cache after the host snapshot can be released.
+      result.rows.push({ entity: undefined, set: undefined, identityKeys: [], highlighted: false });
+      continue;
+    }
     const keys: string[] = [];
     if (entity.identity?.[index]) {
       const id = host.createSelectionIdBuilder().withCategory(entity, index).createSelectionId();
@@ -49,8 +64,8 @@ export function parseData(
     const highlight = signal?.highlights?.[index];
     result.rows.push({
       entity: entity.values[index], set: set.values[index], identityKeys: keys,
-      entityLabel: valueFormatter.format(entity.values[index], entity.source.format, false, host.locale),
-      setLabel: valueFormatter.format(set.values[index], set.source.format, false, host.locale),
+      entityLabel: formatted(entity.values[index], entity.source.format),
+      setLabel: formatted(set.values[index], set.source.format),
       highlighted: typeof highlight === "number" && Number.isFinite(highlight) && highlight > 0
     });
   }

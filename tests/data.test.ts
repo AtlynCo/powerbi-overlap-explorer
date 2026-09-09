@@ -5,7 +5,8 @@ import { analyze, selectionKeys } from "../src/engine";
 
 // The browser suite exercises real native-shaped host methods against the packaged bundle.
 vi.mock("powerbi-visuals-utils-formattingutils", () => ({
-  valueFormatter: { format: (value: unknown, format?: string) => format === "0.00" ? Number(value).toFixed(2) : String(value ?? "") }
+  valueFormatter: { format: (value: unknown, format?: string) => format === "long" ? "x".repeat(1000)
+    : format === "0.00" ? Number(value).toFixed(2) : String(value ?? "") }
 }));
 
 function fixture(entity: powerbi.PrimitiveValue[] = ["C1", "C1"], set: powerbi.PrimitiveValue[] = ["A", "A"]): powerbi.DataView {
@@ -94,5 +95,24 @@ describe("categorical binding and native identities", () => {
     const view = fixture([1.5], ["A"]);
     view.categorical!.categories![0]!.source.format = "0.00";
     expect(parseData(view, hostMock().host).rows[0]?.entityLabel).toBe("1.50");
+    view.categorical!.categories![0]!.source.format = "long";
+    expect(parseData(view, hostMock().host).rows[0]?.entityLabel).toHaveLength(256);
+  });
+  it("does not retain native identities for invalid primitive rows or parse numeric-looking text", () => {
+    const view = fixture([" ".repeat(257), "001"], ["A", "B"]);
+    view.categorical!.categories![0]!.source.format = "0.00";
+    const { host, built } = hostMock();
+    const data = parseData(view, host);
+    expect(built).toHaveLength(1);
+    expect(data.rows[0]).toEqual({ entity: undefined, set: undefined, identityKeys: [], highlighted: false });
+    expect(data.rows[1]?.entityLabel).toBe("001");
+    expect(analyze(data.rows).invalid).toBe(1);
+  });
+  it("rejects values outside the supported measure role instead of ignoring their binding", () => {
+    const view = fixture();
+    view.categorical!.values = Object.assign([
+      { source: { displayName: "Unexpected", roles: { other: true } }, values: [1, 1] }
+    ], { grouped: () => [] });
+    expect(parseData(view, hostMock().host).error).toBe("Binding");
   });
 });

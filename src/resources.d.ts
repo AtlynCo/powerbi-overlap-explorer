@@ -9,7 +9,12 @@ declare module "*.resjson" {
     "Combinations" | "None" | "Included" | "Excluded" | "Unrestricted" | "Count" |
     "Share" | "Highlighted" | "HighlightHelp" | "NoSignal" | "Details" |
     "DetailsCount" | "SelectEntity" | "MissingIdentity" | "SelectionLimit" |
-    "SelectionFailed" | "Context" | "ContextEntity" | "RenderFailed" | "Keyboard" | "Close" | "InvalidColor" | "InteractionsDisabled",
+    "SelectionFailed" | "Context" | "ContextEntity" | "RenderFailed" | "Keyboard" | "Close" | "InvalidColor" | "InteractionsDisabled" |
+    "ShortTitle" | "Enlarge" | "EnlargeAdvice" | "ShortUniverse" | "ClearShort" | "ModeExact" | "ModeInclusive" |
+    "PartialShort" | "ReductionShort" | "InclusiveShort" | "Diagnostics" | "RawValue" | "ChartHelp" | "BarMeaning" |
+    "Inspect" | "SetsShort" | "NoneShort" | "DataStatus" | "OnboardingTitle" | "OnboardingEntity" | "OnboardingSet" |
+    "OnboardingSignal" | "OnboardingBlank" | "SearchEntities" | "DetailRange" | "IdentityCount" | "Previous" | "Next" |
+    "SelectionPending" | "ClearQueued" | "CompactUniverse" | "SelectSet" | "SetDetails",
     string
   >;
   export default messages;

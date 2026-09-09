@@ -1,0 +1,3 @@
+# Preserve the exact original archive and extracted entry hashes on every checkout.
+package/** -text
+OverlapSample.Report/CustomVisuals/** -text

@@ -1,4 +1,21 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.1.0/schema.json",
-  "themeCollection": {}
+  "themeCollection": {},
+  "resourcePackages": [
+    {
+      "name": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42",
+      "type": "CustomVisual",
+      "items": [
+        {
+          "name": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.pbiviz.json",
+          "path": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.pbiviz.json",
+          "type": "CustomVisualMetadata"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "defaultFilterActionIsDataFilter": false,
+    "useStylableVisualContainerHeader": true
+  }
 }

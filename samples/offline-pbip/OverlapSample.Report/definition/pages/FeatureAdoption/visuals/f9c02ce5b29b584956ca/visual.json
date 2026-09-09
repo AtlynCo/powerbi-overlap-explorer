@@ -1,0 +1,122 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "f9c02ce5b29b584956ca",
+  "position": {
+    "x": 24,
+    "y": 104,
+    "z": 1,
+    "width": 936,
+    "height": 520,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42",
+    "query": {
+      "queryState": {
+        "entity": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Entity ID"
+                }
+              },
+              "queryRef": "FeatureAdoption.Entity ID",
+              "nativeQueryRef": "Entity ID"
+            }
+          ]
+        },
+        "set": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Set Name"
+                }
+              },
+              "queryRef": "FeatureAdoption.Set Name",
+              "nativeQueryRef": "Set Name"
+            }
+          ]
+        },
+        "signal": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FeatureAdoption"
+                    }
+                  },
+                  "Property": "Feature highlight signal"
+                }
+              },
+              "queryRef": "FeatureAdoption.Feature highlight signal",
+              "nativeQueryRef": "Feature highlight signal"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "analysis": [
+        {
+          "properties": {
+            "inclusive": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "maxSets": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            },
+            "minimum": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "appearance": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

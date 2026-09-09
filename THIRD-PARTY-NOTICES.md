@@ -189,6 +189,7 @@ environment or other artifact that includes them.
 | --- | --- | --- |
 | @playwright/test | 1.63.0 | Apache-2.0 |
 | @types/node | 24.10.1 | MIT |
+| ajv | 6.15.0 | MIT |
 | eslint | 9.39.2 | MIT |
 | eslint-plugin-powerbi-visuals | 1.1.1 | MIT |
 | jszip | 3.10.1 | MIT OR GPL-3.0-or-later |
@@ -207,9 +208,10 @@ The manifest also overrides `qs` to `6.16.0` and `sockjs`'s `uuid` to `11.1.1`.
 Together with Vitest `4.1.11`, these are narrowly scoped development/build/test
 dependency fixes, not added visual runtime features. The uuid override is
 scoped to sockjs rather than changing every uuid consumer. The coordinator
-reported zero audit vulnerabilities for the resolved dependency state;
-the final lockfile, current advisories, and actual package/browser validation
-still need their own release evidence.
+records the current local audit and package/browser outcomes in
+`docs/validation-results.md`. Rerun against current advisories before release.
+Ajv is explicitly pinned for development-time public-schema sample validation;
+it is not included in the visual runtime.
 
 These are transitive toolchain resolutions, not original code. Reconcile the
 complete lockfile before release; this direct-package list is **not** an

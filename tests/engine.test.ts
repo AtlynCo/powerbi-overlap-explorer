@@ -60,6 +60,20 @@ describe("entity-level semantics", () => {
     expect(result.sets).toHaveLength(2);
   });
 
+  it("preserves safe 16-digit numbers, signed IDs and longer numeric text without coercion", () => {
+    const result = analyze([
+      row(1000000000000000, "A", "numeric-first"), row(1000000000000001, "A", "numeric-second"),
+      row("9007199254740992", "A", "text-first"), row("9007199254740993", "A", "text-second"),
+      row(-1000000000000001, "B", "negative"), row(0, "B", "zero"),
+      row("1000000000000000", "B", "same-digits-as-number")
+    ]);
+    expect(result.invalid).toBe(0);
+    expect(result.universe).toBe(7);
+    expect(result.sets.map(set => set.size)).toEqual([4, 3]);
+    expect(selectionKeys(result.entities).keys).toHaveLength(7);
+    expect(primitiveKey(1000000000000001)).toBe("n:1000000000000001");
+  });
+
   it("projects rather than silently excluding entities when sets are reduced", () => {
     const result = analyze(ownership, { maxSets: 1 });
     expect(result.omittedSets).toBe(2);

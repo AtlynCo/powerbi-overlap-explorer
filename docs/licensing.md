@@ -26,9 +26,9 @@ Nothing here invents those terms or provides legal advice.
 - The customer/product and feature/adoption samples are entirely fictional
   fixtures authored here. They contain no production records, personal
   names, real customer identifiers, credentials, or external data connections.
-- The PBIP starter uses documented Microsoft file formats and inline M
-  tables. It does not contain someone else's report or fake a bound custom
-  visual/PBIX.
+- The authored PBIP uses documented Microsoft file formats and inline M
+  tables, with original bound pages and this visual's exact package. It does
+  not contain someone else's report or claim to be a native-validated PBIX.
 
 ## Dependencies
 

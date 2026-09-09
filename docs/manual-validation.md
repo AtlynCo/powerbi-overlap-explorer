@@ -15,25 +15,27 @@ version, tenant settings, model, package hash, and evidence for each run.
 | Coexisting blank | Keep C009's Atlas and blank-set rows | C009 remains an Atlas member; no extra entity | Not run |
 | Duplicates | Keep/remove the duplicate C001–Atlas source row | Same entity counts, although Power BI may aggregate duplicate source rows before delivery | Not run |
 | Types and labels | Use model-appropriate date, numeric, text, and Boolean grouping fields; synthetic long/blank values | Typed handling where delivered; no merged keys from formatting; invalid warnings | Not run |
-| Retained sets | Set maximum sets to 2 in customer sample | Prominent omission warning; universe stays 10; projected exact counts 3/3/2/2 | Not run |
+| Retained sets | Set maximum sets to 2 in customer sample | Prominent omission warning; universe stays 10; exact Atlas-only/Beacon-only/both/none = 3/2/3/2 | Not run |
 | Inclusive | Enable inclusive with three sets | Seven nonempty groups; Atlas + Beacon = 3; zero remains separately 1; totals not described as unique universe | Not run |
 | Display filters | Raise minimum, set Top = 1, then restore | Counts/denominator preserved; hidden-combination count changes; no Other union | Not run |
 | Native selection | Add a native table of Entity ID and a native set-size chart; select each group | All represented entity identities passed; observe actual host filtering, including duplicate-row identities | Not run |
+| Set selection | In exact mode, select Atlas in the margin, then select the Atlas-only bar | Margin selects all six Atlas members; exclusive bar selects only C002/C009 | Not run |
 | Add/clear selection | Ctrl/Cmd-select multiple groups, Escape, Clear, select from another visual | Consistent host selection and local state; no stale state after filters | Not run |
 | Selection bounds | Use a model delivering >1,000 native identities for a group and missing-identity cases where feasible | Entire request refused; no partial native selection | Not run |
-| Details | Use >200 contributors; open/close details, select one entity | Explicit first-200/total disclosure; individual identity selection; focus restored on close | Not run |
+| Details | Use >200 contributors; inspect without selecting, search for a late entity, page, resize, select one entity | Every received contributor can be found; explicit page/total disclosure; native individual selection; focus restored on close | Not run |
+| Pending selection | With delayed native responses, Ctrl-add twice, press Escape, rebind/remove the visual | No overlapping requests exceed the cap; clear is queued; stale work does not select a different binding | Not run |
 | Tooltip/context | Hover, right-click, and use Shift+F10 | Group tooltip; native menu labeled as one representative entity, never an intersection identity | Not run |
 | Native highlight | Bind positive COUNTROWS signal, add native chart, configure Highlight | Distinct highlighted entities, not signal sum; group totals remain base counts | Not run |
 | Highlight vs filter | Switch source interaction to Filter; clear selection | Filter can change universe and memberships; no claim of unchanged denominator | Not run |
 | Paging | Deliver >10,000 categorical rows, click Load more repeatedly | Explicit user requests; each aggregate replaces analysis; unknown unloaded total while segmented | Not run |
 | Row cap/refusal | Deliver >30,000 rows and exercise host refusal if possible | At most 30,000 processed; warning; no automatic unbounded requests or completeness claim | Not run |
-| Resize and scrolling | Narrow/short visual, scroll chart/details, resize repeatedly | Alignment and usable controls; no animation; labels bounded | Not run |
+| Resize and scrolling | Use 80x80/258x198/398x298/1280x620/1366x768; dense long labels; scroll both axes; use 20px text | Tiny view asks to enlarge; compact chart is reachable; pinned set margins align; full labels in definitions; no overlapping counts | Not run |
 | Keyboard | Tab, arrows, Home/End, Enter/Space, Escape, context-menu key | Visible focus, appropriate movement and selection, no focus trap | Not run |
 | Assistive technology | Test Windows high contrast and supported screen reader, including selection/warnings | Readable host colors, useful names/status, no color-only meaning | Not run |
 | Language/RTL | English, French, then an RTL host locale | English/French strings and locale numbers; English fallback elsewhere; mirrored navigation | Not run |
 | Service | Publish only after authorization to a controlled workspace; test same interactions | No Desktop-only assumptions; behavior recorded, not presumed | Not run |
 | Export | Export supported PDF/PowerPoint/image paths at several sizes | Record viewport clipping; do not claim offscreen content is fully exported | Not run |
-| Offline sample | Open PBIP with supported Desktop/TMDL/PBIR version, refresh with network disconnected | Inline tables refresh without file paths or credentials; blank page opens; visual added manually | Not run |
+| Offline sample | Open authored PBIP with supported Desktop/TMDL/PBIR version, refresh disconnected, inspect both bound pages and native supporting visuals; save a real PBIX | Inline data needs no paths or credentials; exact package resources/bindings load; interactions and expected counts match; no claim based solely on schema validation | Not run |
 | Lifecycle | Navigate pages/bookmarks, change filters, remove/re-add visual | No stale selection, uncaught error, detached UI, or incorrect accumulated rows | Not run |
 
 Do not publish real data in screenshots or issue attachments. Use only the
