@@ -1,0 +1,37 @@
+{
+  "name": "atlyn-overlap-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bounded entity-level intersection exploration for Power BI",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.tests.json",
+    "lint": "eslint src tests scripts",
+    "test": "vitest run",
+    "build": "pwsh -NoProfile -File scripts/package.ps1 -AllLocales && node scripts/embed-notices.mjs",
+    "package": "pwsh -NoProfile -File scripts/package.ps1 -AllLocales && node scripts/embed-notices.mjs",
+    "test:browser": "playwright test",
+    "audit": "npm audit --audit-level=moderate",
+    "certification": "pwsh -NoProfile -File scripts/package.ps1 -AllLocales -CertificationAudit && node scripts/embed-notices.mjs && node scripts/validate-package.mjs",
+    "check": "npm run typecheck && npm run lint && npm test && npm run certification && npm run test:browser"
+  },
+  "dependencies": {
+    "powerbi-visuals-utils-formattingmodel": "7.1.0",
+    "powerbi-visuals-utils-formattingutils": "7.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.2",
+    "eslint-plugin-powerbi-visuals": "1.1.1",
+    "jszip": "3.10.1",
+    "powerbi-visuals-api": "5.11.1",
+    "powerbi-visuals-tools": "7.2.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.54.0",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "qs": "6.16.0",
+    "sockjs": { "uuid": "11.1.1" }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "dataRoles": [
+    { "name": "entity", "displayName": "Entity ID", "displayNameKey": "Role_Entity", "kind": "Grouping" },
+    { "name": "set", "displayName": "Set Name", "displayNameKey": "Role_Set", "kind": "Grouping" },
+    { "name": "signal", "displayName": "Highlight signal (optional)", "displayNameKey": "Role_Signal", "kind": "Measure" }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [{ "entity": { "min": 1, "max": 1 }, "set": { "max": 1 }, "signal": { "max": 1 } }],
+      "categorical": {
+        "categories": {
+          "select": [{ "for": { "in": "entity" } }, { "for": { "in": "set" } }],
+          "dataReductionAlgorithm": { "window": { "count": 10000 } }
+        },
+        "values": { "select": [{ "bind": { "to": "signal" } }] }
+      }
+    }
+  ],
+  "objects": {
+    "analysis": {
+      "displayName": "Intersection analysis",
+      "displayNameKey": "Analysis",
+      "properties": {
+        "inclusive": { "displayName": "Inclusive intersections", "type": { "bool": true } },
+        "maxSets": { "displayName": "Maximum retained sets", "type": { "numeric": true } },
+        "top": { "displayName": "Top combinations", "type": { "numeric": true } },
+        "minimum": { "displayName": "Minimum entities", "type": { "numeric": true } }
+      }
+    },
+    "appearance": {
+      "displayName": "Appearance",
+      "displayNameKey": "Appearance",
+      "properties": {
+        "barColor": { "displayName": "Bar color", "type": { "fill": { "solid": { "color": true } } } },
+        "fontSize": { "displayName": "Text size", "type": { "numeric": true } }
+      }
+    }
+  },
+  "privileges": [],
+  "supportsHighlight": true,
+  "supportsKeyboardFocus": true,
+  "supportsEmptyDataView": true,
+  "supportsLandingPage": true,
+  "supportsMultiVisualSelection": true,
+  "tooltips": { "supportedTypes": { "default": true } },
+  "sorting": { "default": {} },
+  "suppressDefaultTitle": true
+}

@@ -1,0 +1,52 @@
+table Memberships
+
+	measure 'Highlight signal' = COUNTROWS('Memberships')
+		formatString: 0
+
+	measure 'Distinct entities' = DISTINCTCOUNT('Memberships'[Entity ID])
+		formatString: 0
+
+	column 'Entity ID'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: "Entity ID"
+
+	column 'Set Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: "Set Name"
+
+	column Segment
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Segment
+
+	partition Memberships = m
+		mode: import
+		source =
+				let
+					Source = #table(
+						type table [#"Entity ID" = text, #"Set Name" = nullable text, Segment = text],
+						{
+							{"C001", "Atlas", "Small"},
+							{"C001", "Beacon", "Small"},
+							{"C001", "Atlas", "Small"},
+							{"C002", "Atlas", "Small"},
+							{"C003", "Beacon", "Enterprise"},
+							{"C003", "Cove", "Enterprise"},
+							{"C004", "Atlas", "Enterprise"},
+							{"C004", "Beacon", "Enterprise"},
+							{"C004", "Cove", "Enterprise"},
+							{"C005", "Cove", "Small"},
+							{"C006", "Atlas", "Enterprise"},
+							{"C006", "Cove", "Enterprise"},
+							{"C007", "Beacon", "Small"},
+							{"C008", null, "Enterprise"},
+							{"C009", "Atlas", "Small"},
+							{"C009", null, "Small"},
+							{"C010", "Atlas", "Enterprise"},
+							{"C010", "Beacon", "Enterprise"}
+						}
+					)
+				in
+					Source
