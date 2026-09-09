@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "FeatureAdoption",
+  "displayName": "Feature adoption overlap",
+  "displayOption": "FitToPage",
+  "height": 900,
+  "width": 1440,
+  "visualInteractions": [
+    {
+      "source": "fa795dd2c83f9b45eaf6",
+      "target": "f9c02ce5b29b584956ca",
+      "type": "HighlightFilter"
+    },
+    {
+      "source": "5bbfc9be3da326363755",
+      "target": "f9c02ce5b29b584956ca",
+      "type": "DataFilter"
+    },
+    {
+      "source": "f9c02ce5b29b584956ca",
+      "target": "5bbfc9be3da326363755",
+      "type": "DataFilter"
+    }
+  ]
+}

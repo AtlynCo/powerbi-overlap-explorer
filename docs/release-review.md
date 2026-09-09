@@ -1,101 +1,145 @@
 # Release and certification review
 
+Review prepared **2026-09-09**.
+
 ## Current decision
 
-**Not ready for public distribution or certification submission.** No
-certification approval, marketplace acceptance, legal approval, or Power BI
-host validation is claimed. Version `1.0.0.0` and a stable GUID are technical
-metadata, not evidence of any approval.
+**NO-GO for public distribution, Marketplace submission and certification.**
+This does not prevent local candidate engineering/review. No Microsoft
+approval, native-host validation, legal approval or competitive superiority
+is claimed. A package version, a script named `certification`, or a historical
+test pass does not establish readiness.
 
-The `certification` npm script is a local audit workflow. Passing it is
-necessary evidence for review, not Microsoft certification.
+The coordinator's release branch is **`release-quality-overlap`**, with
+working baseline `origin/main` at `4356e10`, following the merged prior PR.
+The final package SHA-256 is
+`ae2f1c09694fb5cade37bd1bbe30c18d212e8920f7f9a9cadd33a0234f9cebf0`.
+The release seal records the final full source commit and archive/file hashes.
+Repository Actions was disabled by the coordinator (`enabled=false`);
+this release uses **local validation only**, not hosted CI, cloud coding,
+Codespaces, workflow badges or historical hosted results.
+
+### Coordinator-reported local progress
+
+The final **local** `npm run check:release` passed: strict typecheck,
+Microsoft-plugin ESLint, **47 unit tests**, **30 packaged-browser tests**,
+official package audit, local-only policy, **20 schema-validated definitions
+for two authored pages / 12 visuals**, exact sample/package equality and zero
+dependency vulnerabilities. The explicit `npm run eslint` entry point is
+present. Large-text controls, 16-digit/signed identifiers and asynchronous
+selection races are covered.
+
+All 20 final PNGs match the visually inspected candidate pixels byte for byte.
+Final package-linked raw measurements, images, command logs and schema hashes
+are retained; see [validation](validation-results.md) and
+[performance/layout](performance-and-layout.md). These do not establish
+native-host behavior or competitor superiority. The release seal binds the
+committed source to these qualified local artifacts; owner/native gates remain.
 
 ## Confirmed metadata
 
-The coordinator verified these existing Atlyn metadata values, reflected in
-`pbiviz.json`: author **Atlyn**, contact **atlyn.help@gmail.com**, support
-**https://www.atlynco.com/docs/faq**. SDK npm package **5.11.1** exports the
-Power BI API contract **5.11.0**, which the manifest and built package target.
-The contact details are not
-invented placeholders or an unresolved choice of public support channel.
-The owner must still check support-page availability and contact responsiveness
-before publication. The private repository issue tracker is supplementary
-contributor support, not the public channel.
+Author **Atlyn**, contact **atlyn.help@gmail.com**, public support
+**https://www.atlynco.com/docs/faq** are coordinator-verified values reflected
+in `pbiviz.json`. They are not placeholders or unresolved channel choices.
+The owner must still verify public page availability, adequate visual-specific
+support content, and contact responsiveness. A private issue tracker is not
+the public support channel.
 
-## Publication blockers
+Reviewed candidate metadata is version `1.0.0.0`, GUID
+`AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`; SDK npm package
+5.11.1 exposes API contract 5.11.0. Verify these against the final archive.
+Source/distribution license, product terms, privacy and price are **not**
+authorized decisions. Microsoft utility dependency licenses do not license
+this repository.
 
-- [ ] Owner chooses and approves a source/distribution license. Do not assume
-  the Microsoft utility dependencies' MIT license licenses this repository.
-- [ ] Owner approves actual product terms and public privacy/support
-  documentation, if required for the chosen distribution route. No invented
-  EULA, pricing, SLA, warranty, refund, or data-processing commitments.
-- [ ] Review the actual `pbiviz.json` author, support, repository, version, and
-  asset fields against the confirmed details above and verify the support
-  page/contact work; a confirmed address alone does not establish responsiveness.
-- [ ] Complete [manual Desktop/service/model/identity/accessibility/export
-  validation](manual-validation.md) and record actual evidence.
-- [ ] Open and refresh the offline PBIP in a supported Desktop version, import
-  the actual built package, bind the fields manually, and save a real working
-  demonstration. The provided blank-report scaffold is not that completed demo.
+## Submission-blocker matrix
 
-## Engineering evidence to collect
+“Pending” means missing evidence or approval, not a presumed implementation
+failure. Do not close a native or owner gate with an automated local check.
 
-Initial automated outcomes are recorded in [validation results](validation-results.md).
-Keep the release-specific checklist below: local checks do not replace a new
-release review or the manual-host requirements.
+| ID | Gate / consequence | Owner | Required closure evidence | Current status |
+| --- | --- | --- | --- | --- |
+| B01 | Source/distribution rights; blocks public distribution | Product owner/legal | Approved license and provenance/dependency notice review for the exact source/package | **BLOCKED: owner decision** |
+| B02 | Product EULA/contract, privacy and acquisition model; blocks listing | Product owner/legal | Approved contract choice/document, public HTTPS privacy URL, actual pricing/purchase disclosures and market decisions | **BLOCKED: owner decision** |
+| B03 | Publisher authority and public support; blocks submission | Publisher owner | Authorized account/legal entity; working public support and responsive contact; secure reviewer-access plan | **PENDING**; metadata verified, responsiveness/account authority not established |
+| B04 | Final local correctness and failure-state proof | Engineering coordinator | Final revision-linked type/lint/unit/package/Chromium host-mock logs, all intentional limits and adversarial/selection/lifecycle cases | **LOCAL PASS**: 47 unit / 30 packaged-browser cases; source-linked release seal |
+| B05 | Certification build/repository/audit compliance | Engineering coordinator | Current latest API/tools review; required commands/files/plugin config; no moderate/high audit warnings; safe source/bundle; exact rebuild/package correspondence | **LOCAL PASS**: explicit `eslint`, current reviewed SDK/tools, documented custom package path, zero audit vulnerabilities; Microsoft approval not implied |
+| B06 | Native Desktop/service/core host behavior | Native validation coordinator | Actual N01–N13/N15 results in [certification instructions](certification-requirements.md), real identities/model/filtering/persistence, profiles and defects resolved | **NOT RUN in this dossier** |
+| B07 | Mobile/touch/accessibility/export coverage | Native validation coordinator | N14/N16 outcomes on applicable supported hosts; tenant/certification restrictions honestly recorded; no false conformance/export claim | **NOT RUN** |
+| B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PASS / NATIVE PENDING**: 20 definitions, two bound pages, exact embedded archive/resources; native acceptance remains open |
+| B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **BLOCKED: no verified native PBIX** |
+| B10 | Listing icon/logo/screenshots | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review | **LOCAL ASSETS COMPLETE / NATIVE SCREENSHOTS PENDING**; three correctly sized local previews are explicitly host-mock labeled |
+| B11 | Source/package/evidence integrity | Engineering coordinator | Immutable [dossier manifest](submission-dossier.md#immutable-evidence-manifest), final source/archive/package/input/media hashes and qualified evidence classes | Recorded by the clean-commit, write-once release seal; final location/hash accompanies the PR handoff |
+| B12 | Listing and certification handoff | Product/publisher + coordinator | Approved accurate listing/notes, resolved required gates, lowercase `certification` branch matching frozen package/source; explicit instruction to submit | **BLOCKED pending prior gates and owner authorization** |
+| B13 | Certification claims/badge | Microsoft + publisher | Actual approval for this version, retained decision | **NOT SUBMITTED / NOT CERTIFIED** |
 
-- [ ] Pin and retain `package-lock.json`; record Node, npm, PowerShell, SDK API,
-  and visuals-tools versions. Use the Windows / Node 24 / PowerShell 7
-  packaging baseline (`windows-latest` in CI) with .NET cryptography available.
-  Run a clean locked dependency restore.
-- [ ] Record typecheck, lint, unit, browser, package-audit, and dependency-audit
-  results. Separate warnings, accepted residual risk, and failing requirements.
-  The coordinator reported zero audit vulnerabilities after the narrow
-  development-tool fixes (Vitest 4.1.11, qs 6.16.0, sockjs-scoped uuid 11.1.1).
-  This is not a package/browser test result or a permanent clean-audit guarantee.
-- [ ] Inspect the final `.pbiviz` archive, version/GUID, capabilities, icon,
-  string resources, formatting controls, source map/debug exposure, and
-  third-party notices actually shipped in the package. Include full Microsoft
-  MIT utility notices and embedded Globalize/Globalize Cultures attribution
-  and MIT text; an omitted external Terser license file does not satisfy this.
-- [ ] Verify `scripts/package.ps1` isolates development certificate generation,
-  does not install/trust a certificate, and cleans up its PFX/password files.
-  Do not present the development certificate as production signing.
-- [ ] Confirm no external JS, remote font/image, telemetry, network endpoint,
-  storage, dynamic-code execution, or unexpected privilege has entered the
-  runtime bundle. This is an implementation review, not a blanket compliance
-  claim about the host or toolchain.
-- [ ] Verify caps and adversarial inputs: 30,000 rows, 10 sets, 1,023 nonempty
-  masks, 1,000 selection identities, 200 details, and 256-character raw strings.
-- [ ] Verify aggregate snapshots replace prior analysis and no hidden
-  pagination loop or unbounded local append exists.
-- [ ] Verify every invalid/dropped/segmented state discloses limited data;
-  every set reduction discloses retained-set exactness.
-- [ ] Verify exact/inclusive semantics, blank-set universe rows, duplicate
-  identity retention, positive native highlight presence, and all-or-nothing
-  selection with a real model.
-- [ ] Review original icon/source provenance and all runtime dependency
-  licenses/notices; retain the dependency inventory with the release.
-- [ ] Record package SHA-256, source revision, evidence locations, reviewer,
-  date, and any remaining limitations. Do not populate fabricated values.
+Microsoft requirements and citations are maintained in
+[certification requirements](certification-requirements.md).
+Publication requires a real offline PBIX, not a PBIP substitute; Microsoft
+documents conversion only through Desktop **File > Save as**.
+Current screenshot constraints, full proposed listing copy and the evidence
+inventory are in the [submission dossier](submission-dossier.md).
 
-## Submission-specific work
+## Evidence acceptance
 
-- [ ] Re-read current Microsoft
-  [custom visual certification requirements](https://learn.microsoft.com/power-bi/developer/visuals/power-bi-custom-visuals-certified)
-  and [AppSource publication guidance](https://learn.microsoft.com/power-bi/developer/visuals/office-store).
-  Requirements and supported host versions can change.
-- [ ] Establish the authorized publisher/account and distribution route.
-  Publication or submission requires a separate owner instruction.
-- [ ] Prepare accurate descriptions, screenshots, support/privacy links,
-  licensing information, test instructions, and a genuinely working sample.
-  Avoid promising complete-universe counts, unlimited sets/data, arbitrary
-  intersection identities, or full-scroll-content exports.
-- [ ] Use the actual current submission checklist and required artifact
-  formats. A `.pbip` source starter is not automatically a substitute for any
-  required packaged demonstration.
-- [ ] Submit only after blockers are resolved; retain the resulting Microsoft
-  review decision. Never display a certification claim or badge before approval.
+- **Static source/docs:** establishes declared contracts and sourced policy,
+  not executed behavior.
+- **Local final-package automation:** establish only the scenarios actually
+  run; packaged Chromium uses host mocks. Record exact results, errors,
+  request observations, tool versions, date, fixture and package hashes.
+- **Local performance/layout captures:** identify baseline versus final
+  package, metric boundaries, repetitions and viewport. They are not a
+  native-host or competitor benchmark.
+- **Schema-valid authored PBIP:** useful preparation, not proof of native
+  opening, binding, refresh, identities or PBIX production.
+- **Native host evidence:** required for real model selection, cross-filter/
+  highlight, Desktop/service/mobile, accessibility, dashboard and export
+  assertions; never infer from a mocked selection manager.
+- **Owner/Microsoft decisions:** only actual authorization/approval closes
+  those gates. Local checks cannot manufacture legal or certification status.
 
-No external submission or publication is performed by this repository's
-documentation or local package commands.
+[Validation results](validation-results.md) may hold engineering records.
+Do not lift earlier “29 unit / 13 browser” counts, an earlier clean audit,
+or a merged PR into this review as current release proof. Each final claim
+must trace to the final revision and package; otherwise leave it pending.
+If a later source/package change affects prior evidence, rerun the affected
+checks and capture a new seal instead of editing an immutable evidence set.
+
+## Truthful product and comparison boundaries
+
+The v1 contract is distinct entities in the received snapshot; exact/inclusive
+intersections; default six/maximum ten retained sets; default Top twenty/
+maximum fifty combinations; maximum 30,000 processed rows; explicit blank-set
+universe observations; no runtime privileges; at most 1,000 native identities
+per combined selection, with all-or-nothing refusal.
+
+Retained-set exactness is not full-model exactness. Inclusive is not union.
+Visible-bar sums are not always the universe. Native context menus refer to a
+representative entity, not a generated intersection identity. A completeness
+message about processed host data does not guarantee full-source coverage.
+
+[Comparison](comparison.md) verifies the real UpSet.js Power BI integration,
+including its AGPLv3/commercial-license evidence, three modes, entity/flag data
+contract and native identity source design. It also compares the native
+matrix and Deneb's flexible specification workflow. The source-derived
+12-capability table and synthetic sample oracles are not measured superiority,
+competitor counts/performance, or a “best in class” result.
+
+## Final coordinator handoff
+
+1. Complete/review baseline and final **local** evidence, fix failures, and
+   reconcile any stale sample expectation; customer Atlas-only is C002/C009.
+2. Complete owner gates and genuine native tests, PBIX and listing captures;
+   preserve qualified blocked/not-run outcomes rather than inventing passes.
+3. Finalize reviewed source, documented build/postprocessing, package, sample,
+   listing copy and immutable evidence correspondence.
+4. **Only after that coordinated baseline/final review**, create or advance
+   the lowercase **`certification`** branch at the exact reviewed source
+   matching the package. Freeze it for the submission process; no independent
+   workstream should create it prematurely.
+5. Obtain explicit publisher authorization for Partner Center submission and
+   source access. This dossier prepares that handoff; it does not submit,
+   grant access, accept contracts or publish.
+
+No approval or badge may be shown until the corresponding actual Microsoft
+decision is recorded.

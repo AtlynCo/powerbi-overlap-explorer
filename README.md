@@ -16,7 +16,7 @@ publication blockers; see [release review](docs/release-review.md).
    In Power BI Desktop, use **Import a visual from a file**. Tenant policy can
    restrict uncertified/custom visuals.
 2. Load [customer-product.csv](samples/customer-product.csv), or open the
-   [offline PBIP starter](samples/offline-pbip/README.md). Keep IDs as text.
+   [offline PBIP sample](samples/offline-pbip/README.md). Keep IDs as text.
 3. Put one column in each required grouping well:
 
    | Field well | Kind | Example | Meaning |
@@ -42,9 +42,10 @@ publication blockers; see [release review](docs/release-review.md).
    values do not count. The signal is **never summed to calculate entity
    counts**; an entity with several highlighted rows counts once.
 
-The PBIP contains inline data and a blank report page, **not a pre-bound
-custom-visual demonstration**. Importing the package, adding the visual,
-binding fields, and saving the report are deliberate manual steps.
+The authored PBIP uses inline synthetic data, bound customer-product and
+feature-adoption pages, and an embedded copy of the exact local package.
+Source/schema validation is not a Desktop-open result: the coordinator must
+open, refresh, inspect interactions, and save a genuine PBIX in Desktop.
 
 ## Data contract and denominator
 
@@ -117,7 +118,7 @@ invented **Other** union: the visual reports only a hidden-combination count.
 | Raw string values / displayed labels | — | 256 characters |
 | Inclusive candidate combinations | — | At most 1,023 nonempty masks |
 | Native selection identities | — | At most 1,000, including additive selection |
-| Contributors in details | — | First 200, in ordinal typed-entity-key order |
+| Contributors in details | — | 200 per page, searchable across the entire received combination |
 
 The initial categorical window requests 10,000 rows; this is a host request,
 not a guaranteed delivery size. **Load more** explicitly requests
@@ -137,11 +138,16 @@ context, not a guarantee that all source-system entities have been included.
 
 - Click a combination, or press **Enter/Space**, to select all represented
   native entity category identities and open contributor details.
+- Click a set margin to select **all members of that set**, even in exact
+  mode. It does not select just the corresponding exclusive singleton bar.
+- **Inspect** opens searchable, paged contributors without changing native
+  selection. Full set names and source labels are in **Data & definitions**.
 - **Ctrl/Cmd + click** adds a group or contributor to native selection.
-  **Clear selection** or **Escape** clears it.
+  **Clear selection** or **Escape** clears it. Pending native selection
+  requests are serialized; a clear requested while busy is queued.
 - An oversized group or a group with missing native identities is **refused
-  in full**. The visual never silently selects the first 1,000. The first
-  200 contributors remain available for individual selection; a contributor
+  in full**. The visual never silently selects the first 1,000. Search and
+  200-entity pages make every received contributor available; a contributor
   can itself be unselectable if its identities are missing or exceed the cap.
 - A native tooltip describes the group. Right-click or **Shift+F10/context-menu
   key** opens a native menu for the explicitly labeled **first available
@@ -152,9 +158,17 @@ context, not a guarantee that all source-system entities have been included.
   view. Arrow direction follows right-to-left layout.
 - Text alternatives include included/excluded sets, counts, and denominator
   shares. The dot matrix is decorative relative to those alternatives.
-  Selection uses outlines/text in addition to color. Host high contrast,
+  Selection uses outlines/text in addition to color; a partly selected
+  group is announced as mixed and outlined with dashes. Host high contrast,
   right-to-left layout, English (`en-US`), and French (`fr-FR`) are supported;
   untranslated locales use English strings. There is no animation.
+
+Set margins stay visible while scrolling horizontally, and their rows remain
+aligned with the dot matrix during vertical scrolling. Compact layouts start
+the chart after a short universe summary; diagnostics expand on demand.
+Below 180 px wide or 150 px high, an explicit enlargement message replaces
+an unusably small chart. At 258x198, scrolling is necessary; this is not a
+promise that every set and combination fits simultaneously.
 
 These are implementation behaviors, not a completed accessibility conformance
 claim. Real screen-reader and Power BI host checks remain in the
@@ -187,7 +201,8 @@ identity behavior must be validated manually; no certification is implied.
 ## Local development
 
 The supported packaging baseline is **Windows, Node.js 24, and PowerShell 7
-(`pwsh`) with .NET cryptography available**. CI uses `windows-latest`.
+(`pwsh`) with .NET cryptography available**. Validation is local only:
+GitHub Actions are disabled and no workflow files or hosted CI are required.
 Cross-platform packaging has not been established. After cloning:
 
 ```powershell
@@ -198,6 +213,27 @@ npm test
 npm run package
 npm run test:browser
 ```
+
+Deep Windows worktree paths can exceed Git's default path limit for the
+authored sample's required private-resource filenames. Use per-command
+`git -c core.longpaths=true ...`, not a machine-wide configuration change.
+Native sample opening may require a short coordinator-owned test path.
+
+`npm run check` runs typecheck, lint, unit tests, packaging/audits, packaged
+browser tests and the local-only policy check. `npm run test:layouts` captures
+the five documented sizes; `npm run benchmark` records raw local latency
+samples. Run these against the same final package, not between repackages.
+Use `npm run assets` for the original icon and 50/150/300 px logos.
+`npm run check:release` runs the complete local sequence, including final
+sample preparation/schema validation, screenshots, measurements and audit.
+`npm run eslint` supplies the explicit certification-review lint entry point.
+Sample regeneration intentionally updates tracked package/resources; commit
+them together. The first schema check may fetch Microsoft's public schemas;
+`npm run validate:sample -- --offline` uses the warmed local cache.
+After committing a clean source baseline, `npm run seal -- <new-absolute-folder>`
+copies the source archive, package, samples, assets and local evidence into a
+write-once handoff folder and hashes every file. This detects later changes;
+it is not a cryptographic signature or a WORM storage guarantee.
 
 Package commands invoke
 `pwsh -NoProfile -File scripts/package.ps1`. The wrapper isolates the visuals
@@ -239,7 +275,11 @@ The original [SVG icon](assets/icon.svg) produces the required 20×20 PNG with
 - [Semantics and boundary cases](docs/semantics.md)
 - [Manual validation matrix](docs/manual-validation.md)
 - [Certification and publication checklist](docs/release-review.md)
+- [Comparative evidence and product gaps](docs/comparison.md)
+- [Local performance and visual inspection](docs/performance-and-layout.md)
+- [Current Microsoft submission requirements](docs/certification-requirements.md)
+- [Draft listing and certification dossier](docs/submission-dossier.md)
 - [License and provenance review](docs/licensing.md)
 - [Third-party notices](THIRD-PARTY-NOTICES.md)
 - [Synthetic CSVs and expected results](samples/README.md)
-- [Self-contained offline PBIP starter](samples/offline-pbip/README.md)
+- [Self-contained offline PBIP sample](samples/offline-pbip/README.md)

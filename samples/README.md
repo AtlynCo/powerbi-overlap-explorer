@@ -85,9 +85,12 @@ In inclusive mode, Search + Share includes U001/U004/U010/U012 (count 4).
   feature query `FeatureAdoption` → Close & Apply.
 - **Offline project source:** see [offline-pbip/README.md](offline-pbip/README.md).
   It carries the same records in inline M tables, avoiding machine-specific
-  CSV paths and requiring no source credentials.
+  CSV paths and requiring no source credentials. Both pages are authored with
+  bound explorer, native card/bar/table, and explanatory text. The exact
+  locally built private visual is embedded with SHA256 provenance.
 
-Then import the actual locally built custom visual, bind the first two
-columns, and optionally bind a positive COUNTROWS measure. Native
+For the CSV route, import the actual locally built custom visual, bind the
+first two columns, and optionally bind a positive COUNTROWS measure. The
+authored PBIP already has these bindings and the private visual. Native
 cross-highlighting, selection identities, and export behavior require manual
-Power BI validation; the CSVs alone cannot demonstrate those host behaviors.
+Power BI validation; neither CSV nor PBIR schema checks prove host behavior.

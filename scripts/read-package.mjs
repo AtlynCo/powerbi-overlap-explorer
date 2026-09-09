@@ -2,10 +2,10 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import JSZip from "jszip";
 
-export async function readPackage() {
-  const files = (await readdir("dist")).filter(file => file.endsWith(".pbiviz"));
-  if (files.length !== 1) throw new Error(`Expected one .pbiviz in dist, found ${files.length}`);
-  const absolute = path.resolve("dist", files[0]);
+export async function readPackage(packagePath) {
+  const files = packagePath ? [] : (await readdir("dist")).filter(file => file.endsWith(".pbiviz"));
+  if (!packagePath && files.length !== 1) throw new Error(`Expected one .pbiviz in dist, found ${files.length}`);
+  const absolute = packagePath ? path.resolve(packagePath) : path.resolve("dist", files[0]);
   const bytes = await readFile(absolute);
   const zip = await JSZip.loadAsync(bytes);
   const metadata = JSON.parse(await zip.file("package.json").async("string"));

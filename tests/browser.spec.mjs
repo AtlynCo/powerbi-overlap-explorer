@@ -260,7 +260,7 @@ test("high contrast, RTL keyboard, narrow scroll and French resources", async ({
   await mount(page, { locale: "fr-FR" });
   await update(page);
   await expect(page.getByRole("button", { name: "Effacer la selection" })).toBeVisible();
-  await expect(page.locator(".universe")).toContainText("Univers actuel");
+  await expect(page.locator(".universe")).toContainText("univers recu");
 });
 
 test("unsafe labels stay text, resize preserves data, invalid binding clears old counts", async ({ page }) => {

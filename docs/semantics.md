@@ -24,7 +24,9 @@ formatting does not define equality. Dates key by ISO instant. Like ordinary
 JavaScript numbers, negative and positive zero share a numeric key.
 
 Blank Set Name is a valid universe-only observation; blank Entity ID is
-invalid. Raw overlong strings are rejected instead of truncated into another
+invalid. Even whitespace-only strings must respect the 256-character limit.
+Sparse/missing input entries are invalid, not uncounted gaps.
+Raw overlong strings are rejected instead of truncated into another
 key. Formatted labels may be shortened to the 256-character display bound.
 An unsupported Set Name invalidates the entire row, not just that membership.
 
@@ -99,7 +101,15 @@ If an entity has any missing represented identity, or if the deduplicated
 identity set exceeds 1,000, the selection is refused without sending a subset.
 The cap applies to identities, not entity count, and includes existing
 identities for additive selection. Detail display is independently capped at
-200 entities; this is not a group-selection approximation.
+200 entities per page, with search across all received contributors; this is
+not a group-selection approximation. Pending native requests cannot race past
+the additive cap; a clear requested while busy runs after the pending request.
+Destroyed or rebound instances do not dispatch stale queued selections.
+
+Set-margin selection collects all members of that set in both modes. It does
+not mean an exclusive singleton intersection. A partially selected group has a
+mixed accessible state, not a false full-selection state. Inspection can be
+opened independently of selection, including when a whole group exceeds the cap.
 
 Tooltips describe the full group. Native context menus act on the first
 available representative identity and label the represented entity. They do

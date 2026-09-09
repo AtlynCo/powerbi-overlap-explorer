@@ -61,17 +61,26 @@ export function normalizeOptions(options: Partial<AnalysisOptions>): AnalysisOpt
 }
 
 // Typed keys keep 1, "1", and true distinct; labels never serve as host identities.
-export function primitiveKey(value: unknown): string | undefined {
+export function isEntityValue(value: unknown): value is string | number | boolean | Date {
   if (typeof value === "string")
-    return value.trim().length > 0 && value.length <= LIMITS.text ? `s:${value}` : undefined;
-  if (typeof value === "number") return Number.isFinite(value) ? `n:${value}` : undefined;
+    return value.length <= LIMITS.text && value.trim().length > 0;
+  if (typeof value === "number") return Number.isFinite(value);
+  if (typeof value === "boolean") return true;
+  return value instanceof Date && Number.isFinite(value.getTime());
+}
+
+export function primitiveKey(value: unknown): string | undefined {
+  if (!isEntityValue(value)) return undefined;
+  if (typeof value === "string") return `s:${value}`;
+  if (typeof value === "number") return `n:${value}`;
   if (typeof value === "boolean") return `b:${value}`;
-  if (value instanceof Date && Number.isFinite(value.getTime())) return `d:${value.toISOString()}`;
+  if (value instanceof Date) return `d:${value.toISOString()}`;
   return undefined;
 }
 
-function isBlank(value: unknown): boolean {
-  return value === null || value === undefined || (typeof value === "string" && !value.trim());
+export function isBlankSet(value: unknown): boolean {
+  return value === null || value === undefined ||
+    (typeof value === "string" && value.length <= LIMITS.text && !value.trim());
 }
 
 function label(value: unknown, formatted?: string): string {
@@ -80,6 +89,13 @@ function label(value: unknown, formatted?: string): string {
 }
 
 export function ordinal(a: string, b: string): number { return a < b ? -1 : a > b ? 1 : 0; }
+
+function disambiguateLabels(items: { label: string }[]): void {
+  if (new Set(items.map(item => item.label)).size === items.length) return;
+  // Distinct typed values can share a model-formatted label. Prefix the entire
+  // deterministic list so even a source label resembling a suffix stays unique.
+  items.forEach((item, index) => { item.label = `${index + 1}: ${item.label}`.slice(0, LIMITS.text); });
+}
 
 export function analyze(rows: readonly MembershipRow[], options: Partial<AnalysisOptions> = {}, received = rows.length): Analysis {
   const config = normalizeOptions(options);
@@ -91,9 +107,9 @@ export function analyze(rows: readonly MembershipRow[], options: Partial<Analysi
   const processed = Math.min(rows.length, LIMITS.rows);
   for (let index = 0; index < processed; index++) {
     const row = rows[index];
-    if (!row) continue;
+    if (!row) { invalid++; continue; }
     const entityKey = primitiveKey(row.entity);
-    const setKey = isBlank(row.set) ? null : primitiveKey(row.set);
+    const setKey = isBlankSet(row.set) ? null : primitiveKey(row.set);
     if (entityKey === undefined || setKey === undefined) { invalid++; continue; }
     let entity = entities.get(entityKey);
     if (!entity) {
@@ -117,6 +133,8 @@ export function analyze(rows: readonly MembershipRow[], options: Partial<Analysi
   }
   const retained = [...sets.values()].sort((a, b) => b.size - a.size || ordinal(a.key, b.key)).slice(0, config.maxSets);
   const members = [...entities.values()].sort((a, b) => ordinal(a.key, b.key));
+  disambiguateLabels(retained);
+  disambiguateLabels(members);
   const exact = new Map<number, Combination>();
   for (const entity of members) {
     retained.forEach((set, bit) => { if (entity.memberships.has(set.key)) entity.mask |= 1 << bit; });

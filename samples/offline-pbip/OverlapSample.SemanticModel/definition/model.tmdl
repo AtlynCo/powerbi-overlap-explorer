@@ -3,5 +3,5 @@ model Model
 	defaultPowerBIDataSourceVersion: powerBI_V3
 	sourceQueryCulture: en-US
 
-	ref table Memberships
-	ref table FeatureAdoption
+ref table Memberships
+ref table FeatureAdoption

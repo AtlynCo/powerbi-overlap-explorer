@@ -1,22 +1,17 @@
 import powerbi from "powerbi-visuals-api";
-import { Analysis, Combination, Entity, analyze, boundedInteger, contributors, LIMITS, selectionKeys } from "./engine";
+import { Analysis, Combination, Entity, analyze, contributors, LIMITS, selectionKeys } from "./engine";
 import { ParsedData, parseData } from "./data";
 import { FormattingSettingsService, Settings } from "./settings";
 import { localizer } from "./localization";
+import { Layout, button, element, renderLayout } from "./layout";
 import "../style/visual.less";
 
 type NativeId = powerbi.visuals.ISelectionId;
 type Update = powerbi.extensibility.visual.VisualUpdateOptions;
 
-function element<K extends keyof HTMLElementTagNameMap>(tag: K, className = "", text?: string): HTMLElementTagNameMap[K] {
-  const node = document.createElement(tag);
-  node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-
 function isNativeId(id: powerbi.extensibility.ISelectionId): id is NativeId {
-  return "getKey" in id && typeof id.getKey === "function" && "includes" in id && typeof id.includes === "function";
+  return typeof id === "object" && id !== null && "getKey" in id && typeof id.getKey === "function" &&
+    "includes" in id && typeof id.includes === "function";
 }
 
 export class Visual implements powerbi.extensibility.visual.IVisual {
@@ -28,19 +23,29 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   private readonly number: Intl.NumberFormat;
   private readonly percent: Intl.NumberFormat;
   private settings = new Settings();
+  private metadataView?: powerbi.DataView;
   private parsed?: ParsedData;
   private analysis?: Analysis;
-  private dataView?: powerbi.DataView;
+  private layout?: Layout;
   private selected: NativeId[] = [];
-  private bars: { button: HTMLButtonElement; mask: number }[] = [];
-  private status = element("p", "interaction-status");
-  private detail = element("section", "details");
+  private viewport = { width: 0, height: 0 };
+  private analysisSignature = "";
+  private topology = "";
+  private binding = "";
+  private focusedMask = 0;
+  private detailMask?: number;
+  private detailSetKey?: string;
+  private detailSearch = "";
+  private detailPage = 0;
+  private members = new Map<number, Entity[]>();
+  private diagnosticsOpen = false;
   private pendingFetch = false;
   private rejectedFetch = false;
+  private unexpectedSegment = false;
+  private nativeBusy = false;
+  private clearRequested = false;
   private destroyed = false;
   private revision = 0;
-  private focusedMask = 0;
-  private unexpectedSegment = false;
 
   constructor(options?: powerbi.extensibility.visual.VisualConstructorOptions) {
     if (!options) throw new Error("Atlyn Overlap Explorer requires visual constructor options.");
@@ -50,7 +55,6 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     this.formatting = new FormattingSettingsService(this.host.createLocalizationManager());
     this.number = new Intl.NumberFormat(this.host.locale);
     this.percent = new Intl.NumberFormat(this.host.locale, { style: "percent", maximumFractionDigits: 1 });
-    this.root.setAttribute("aria-label", this.t("Title"));
     this.root.dir = /^(ar|fa|he|ur)(-|$)/i.test(this.host.locale) ? "rtl" : "ltr";
     options.element.appendChild(this.root);
     this.manager.registerOnSelectCallback(ids => {
@@ -67,29 +71,54 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     if (this.destroyed) return;
     this.host.eventService.renderingStarted(options);
     try {
-      this.root.style.width = `${Math.max(0, options.viewport.width)}px`;
-      this.root.style.height = `${Math.max(0, options.viewport.height)}px`;
-      const isData = (options.type & powerbi.VisualUpdateType.Data) !== 0;
-      if (isData) {
+      this.viewport = { width: Math.max(0, options.viewport.width), height: Math.max(0, options.viewport.height) };
+      this.root.style.width = `${this.viewport.width}px`;
+      this.root.style.height = `${this.viewport.height}px`;
+      const dataChanged = (options.type & powerbi.VisualUpdateType.Data) !== 0 || !this.parsed;
+      const incoming = options.dataViews?.[0];
+      if (incoming) this.metadataView = { metadata: incoming.metadata };
+      if (dataChanged) {
         this.revision++;
         this.pendingFetch = false;
         this.rejectedFetch = false;
         this.unexpectedSegment = options.operationKind === powerbi.VisualDataChangeOperationKind.Segment;
-        this.dataView = this.unexpectedSegment ? undefined : options.dataViews?.[0];
-      } else if (options.dataViews?.[0]) {
-        this.dataView = options.dataViews[0];
+        const view = this.unexpectedSegment ? undefined : incoming;
+        this.parsed = parseData(view, this.host);
+        this.binding = JSON.stringify(view?.categorical?.categories?.map(column => [column.source.queryName, column.source.roles]) ?? []);
+        this.members.clear();
+        if (!view) this.metadataView = undefined;
       }
-      this.settings = this.dataView
-        ? this.formatting.populateFormattingSettingsModel(Settings, this.dataView) : new Settings();
-      this.parsed = parseData(this.dataView, this.host);
+      this.settings = this.metadataView
+        ? this.formatting.populateFormattingSettingsModel(Settings, this.metadataView) : new Settings();
       const card = this.settings.analysis;
-      this.analysis = analyze(this.parsed.rows, {
-        inclusive: card.inclusive.value, maxSets: card.maxSets.value, top: card.top.value, minimum: card.minimum.value
-      }, this.parsed.received);
+      const configuration = { inclusive: card.inclusive.value, maxSets: card.maxSets.value,
+        top: card.top.value, minimum: card.minimum.value };
+      const signature = JSON.stringify(configuration);
+      if (dataChanged || signature !== this.analysisSignature || !this.analysis) {
+        this.analysis = analyze(this.parsed!.rows, configuration, this.parsed!.received);
+        this.analysisSignature = signature;
+        this.members.clear();
+      }
+      const topology = JSON.stringify([this.binding, this.analysis.sets.map(set => set.key), this.analysis.options.inclusive]);
+      if (topology !== this.topology) {
+        this.focusedMask = this.analysis.combinations[0]?.mask ?? 0;
+        this.detailMask = undefined;
+        this.detailSetKey = undefined;
+        this.detailSearch = "";
+        this.detailPage = 0;
+        this.topology = topology;
+      }
+      if (!this.analysis.combinations.some(item => item.mask === this.focusedMask))
+        this.focusedMask = this.analysis.combinations[0]?.mask ?? 0;
+      if (this.detailMask !== undefined && this.detailSetKey === undefined &&
+          !this.analysis.combinations.some(item => item.mask === this.detailMask))
+        this.detailMask = undefined;
       this.selected = this.manager.getSelectionIds().filter(isNativeId);
       this.render();
       this.host.eventService.renderingFinished(options);
     } catch (error) {
+      this.layout = undefined;
+      this.members.clear();
       this.root.replaceChildren(element("p", "warning", this.t("RenderFailed")));
       this.host.eventService.renderingFailed(options, error instanceof Error ? error.message : String(error));
     }
@@ -100,306 +129,321 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
   }
 
   private render(): void {
-    const analysis = this.analysis!;
-    const parsed = this.parsed!;
-    const focused = this.root.contains(document.activeElement);
-    const scroll = this.root.querySelector(".chart-scroll");
-    const oldScroll = { left: scroll?.scrollLeft ?? 0, top: this.root.scrollTop };
+    const active = document.activeElement;
+    const hadFocus = this.root.contains(active);
+    const focusKey = active instanceof HTMLElement ? active.dataset.focusKey : undefined;
+    const cursor = active instanceof HTMLInputElement ? active.selectionStart : undefined;
+    const scroll = { left: this.layout?.scroller?.scrollLeft ?? 0, top: this.layout?.scroller?.scrollTop ?? 0 };
     const palette = this.host.colorPalette;
     const hc = palette.isHighContrast;
+    const accent = this.settings.appearance.barColor.value.value;
+    const validAccent = /^#[0-9a-f]{6}$/i.test(accent);
     this.root.classList.toggle("high-contrast", hc);
     this.root.style.setProperty("--foreground", hc ? palette.foreground.value : "#172D38");
     this.root.style.setProperty("--background", hc ? palette.background.value : "#FFFFFF");
-    const accent = this.settings.appearance.barColor.value.value;
-    const validAccent = /^#[0-9a-f]{6}$/i.test(accent);
     this.root.style.setProperty("--accent", hc ? palette.foreground.value : validAccent ? accent : "#176B87");
     this.root.style.setProperty("--selected", hc ? palette.foregroundSelected.value : "#8B3B00");
-    this.root.style.fontSize = `${boundedInteger(this.settings.appearance.fontSize.value, 12, 10, 20)}px`;
-    this.root.replaceChildren();
-    this.bars = [];
-    const header = element("header");
-    header.append(element("h2", "", this.t("Title")),
-      element("strong", "mode", this.t(analysis.options.inclusive ? "Inclusive" : "Exact")));
-    const toolbar = element("div", "toolbar");
-    const clear = this.button(this.t("Clear"), () => this.clear());
-    clear.disabled = this.host.hostCapabilities?.allowInteractions === false;
-    toolbar.append(clear);
-    if (parsed.segmented && !parsed.error && analysis.received < LIMITS.rows) {
-      const load = this.button(this.t(this.rejectedFetch ? "Retry" : "Load"), () => this.loadMore());
-      load.disabled = this.pendingFetch || this.host.hostCapabilities?.allowInteractions === false;
-      toolbar.append(load);
-    }
-    header.append(toolbar);
-    this.root.append(header);
-    this.status = element("p", "interaction-status");
-    this.status.setAttribute("role", "status");
-    this.status.setAttribute("aria-live", "polite");
-    this.root.append(this.status);
-    if (!validAccent) this.status.textContent = this.t("InvalidColor");
-    if (this.unexpectedSegment || parsed.error) {
-      this.status.textContent = this.t(this.unexpectedSegment ? "UnexpectedSegment" : parsed.error!);
-      return;
-    }
-    const summary = element("div", "summary");
-    const n = (value: number) => this.number.format(value);
-    summary.append(element("p", "universe", this.t("Universe", n(analysis.universe))),
-      element("p", "", this.t("Stats", n(analysis.received), n(analysis.invalid), n(analysis.deduplicated), n(analysis.dropped))));
-    const partial = parsed.segmented || analysis.invalid > 0 || analysis.dropped > 0;
-    summary.append(element("p", partial ? "warning completeness" : "completeness", this.t(partial ? "Partial" : "Complete")),
-      element("p", "", this.t(parsed.segmented ? "Unloaded" : "Loaded")),
-      element("p", "", this.t("Zero", n(analysis.zero))));
-    if (analysis.omittedSets) summary.append(element("p", "warning", this.t("Reduction", n(analysis.omittedSets))));
-    if (analysis.received >= LIMITS.rows && (parsed.segmented || analysis.dropped))
-      summary.append(element("p", "warning", this.t("RowBound")));
-    if (this.pendingFetch) summary.append(element("p", "warning", this.t("Loading")));
-    if (this.rejectedFetch) summary.append(element("p", "warning", this.t("Rejected")));
-    summary.append(element("p", "", this.t(analysis.options.inclusive ? "InclusiveHelp" : "ExactHelp")),
-      element("p", "", this.t(parsed.highlights ? "HighlightHelp" : "NoSignal")),
-      element("p", "", this.t("Hidden", n(analysis.hiddenCombinations))));
-    this.root.append(summary);
-    if (!analysis.universe || !analysis.combinations.length) {
-      this.root.append(element("p", "", this.t(analysis.universe ? "NoCombinations" : "NoData")));
-      return;
-    }
-    this.root.append(element("p", "keyboard-help", this.t("Keyboard")));
-    const scroller = element("div", "chart-scroll");
-    scroller.setAttribute("role", "region");
-    scroller.setAttribute("aria-label", this.t("Combinations"));
-    scroller.tabIndex = 0;
-    const chart = element("div", "chart");
-    chart.style.gridTemplateColumns = `minmax(220px, 260px) repeat(${analysis.combinations.length}, 76px)`;
-    const margins = element("div", "margins");
-    margins.append(element("div", "bar-space margin-title", this.t("Combinations")),
-      element("div", "index-row", this.t("SetSizes")));
-    const largestSet = Math.max(1, ...analysis.sets.map(set => set.size));
-    for (const set of analysis.sets) {
-      const row = element("div", "set-row");
-      row.title = `${set.label}: ${n(set.size)}`;
-      const meter = element("span", "set-meter");
-      const fill = element("span", "set-fill");
-      fill.style.width = `${100 * set.size / largestSet}%`;
-      meter.append(fill);
-      row.append(element("span", "set-label", set.label), meter, element("span", "set-count", n(set.size)));
-      margins.append(row);
-    }
-    chart.append(margins);
-    const maximum = Math.max(1, ...analysis.combinations.map(item => item.count));
-    for (const combination of analysis.combinations) {
-      const button = element("button", "combination");
-      button.type = "button";
-      button.dataset.mask = String(combination.mask);
-      button.setAttribute("aria-label", this.combinationLabel(combination));
-      button.title = `${this.combinationLabel(combination)}. ${this.t("Context")}`;
-      const barSpace = element("div", "bar-space");
-      barSpace.append(element("span", "count", n(combination.count)));
-      const track = element("div", "bar-track");
-      const bar = element("div", "bar");
-      bar.style.height = `${100 * combination.count / maximum}%`;
-      track.append(bar);
-      if (parsed.highlights) {
-        const highlight = element("div", "highlight");
-        highlight.style.height = `${100 * combination.highlighted / maximum}%`;
-        highlight.hidden = combination.highlighted === 0;
-        track.append(highlight);
-        barSpace.append(element("span", "highlight-count", `${this.t("Highlighted")}: ${n(combination.highlighted)}`));
-      }
-      barSpace.append(track);
-      button.append(barSpace, element("div", "index-row", `#${chart.children.length}`));
-      const matrix = element("div", "matrix");
-      const active = analysis.sets.map((_, bit) => bit).filter(bit => combination.mask & (1 << bit));
-      if (active.length > 1) {
-        const connector = element("span", "connector");
-        connector.style.top = `${(active[0]! + 0.5) * 32}px`;
-        connector.style.height = `${(active[active.length - 1]! - active[0]!) * 32}px`;
-        matrix.append(connector);
-      }
-      analysis.sets.forEach((_, bit) => {
-        const cell = element("div", "dot-row");
-        cell.append(element("span", `dot${combination.mask & (1 << bit) ? " active" : ""}`));
-        matrix.append(cell);
-      });
-      matrix.setAttribute("aria-hidden", "true");
-      button.append(matrix);
-      button.addEventListener("click", event => {
+    const frame = renderLayout(this.root, this.analysis!, this.parsed!, {
+      ...this.viewport, fontSize: this.settings.appearance.fontSize.value, diagnosticsOpen: this.diagnosticsOpen,
+      pendingFetch: this.pendingFetch, rejectedFetch: this.rejectedFetch, unexpectedSegment: this.unexpectedSegment,
+      interactions: this.host.hostCapabilities?.allowInteractions !== false,
+      t: this.t, number: this.number, description: item => this.combinationLabel(item)
+    });
+    this.layout = frame;
+    if (!validAccent) frame.status.textContent = this.t("InvalidColor");
+    frame.clear?.addEventListener("click", () => this.clear());
+    frame.load?.addEventListener("click", () => this.loadMore());
+    frame.inspect?.addEventListener("click", () => this.showDetails(this.focusedMask, true));
+    frame.diagnostics?.addEventListener("toggle", () => {
+      if (this.layout === frame) this.diagnosticsOpen = frame.diagnostics!.open;
+    });
+    for (const { button: column, combination } of frame.bars) {
+      const activate = () => {
         this.focusedMask = combination.mask;
         this.rove();
-        const members = contributors(analysis, combination.mask);
-        this.showDetails(members);
-        this.select(members, event.ctrlKey || event.metaKey);
+        frame.caption.textContent = this.captionLabel(combination);
+        frame.caption.classList.add("caption-active");
+      };
+      column.addEventListener("focus", activate);
+      column.addEventListener("pointerenter", activate);
+      column.addEventListener("click", event => {
+        activate();
+        this.showDetails(combination.mask, false);
+        this.select(this.contributors(combination.mask), event.ctrlKey || event.metaKey);
       });
-      this.bindTooltip(button, combination);
-      const members = contributors(analysis, combination.mask);
-      this.bindContext(button, members);
-      button.addEventListener("keydown", event => this.navigate(event, combination.mask));
-      this.bars.push({ button, mask: combination.mask });
-      chart.append(button);
+      this.bindTooltip(column, this.combinationLabel(combination), () => this.contributors(combination.mask));
+      this.bindContext(column, () => this.contributors(combination.mask));
+      column.addEventListener("keydown", event => this.navigate(event, combination.mask));
     }
-    scroller.append(chart);
-    this.root.append(scroller);
-    this.detail = element("section", "details");
-    this.detail.hidden = true;
-    this.root.append(this.detail);
-    if (!this.bars.some(bar => bar.mask === this.focusedMask)) this.focusedMask = this.bars[0]!.mask;
+    for (const set of frame.sets) {
+      const entry = this.analysis!.sets[set.index]!;
+      const description = this.t("SelectSet", `${String.fromCharCode(65 + set.index)}: ${entry.label}`, this.number.format(entry.size));
+      const members = () => this.analysis!.entities.filter(entity => Boolean(entity.mask & (1 << set.index)));
+      set.button.addEventListener("click", event => {
+        this.showDetails(1 << set.index, false, set.key);
+        this.select(members(), event.ctrlKey || event.metaKey);
+      });
+      set.button.addEventListener("focus", () => { frame.caption.textContent = description; });
+      set.button.addEventListener("pointerenter", () => { frame.caption.textContent = description; });
+      this.bindTooltip(set.button, description, members, this.t("SetSizes"));
+      this.bindContext(set.button, members);
+    }
+    const current = this.analysis!.combinations.find(item => item.mask === this.focusedMask);
+    if (current) frame.caption.textContent = this.captionLabel(current);
+    if (this.detailMask !== undefined) this.showDetails(this.detailMask, false, this.detailSetKey);
     this.rove();
     this.paintSelection();
-    scroller.scrollLeft = oldScroll.left;
-    this.root.scrollTop = oldScroll.top;
-    if (focused) this.bars.find(bar => bar.mask === this.focusedMask)?.button.focus({ preventScroll: true });
+    if (frame.scroller) { frame.scroller.scrollLeft = scroll.left; frame.scroller.scrollTop = scroll.top; }
+    if (hadFocus && focusKey) {
+      const candidates = Array.from(this.root.querySelectorAll<HTMLElement>("[data-focus-key]"));
+      const target = candidates.find(node => node.dataset.focusKey === focusKey) ??
+        candidates.find(node => node.dataset.focusKey === `mask:${this.focusedMask}`) ?? frame.clear;
+      target?.focus({ preventScroll: true });
+      if (target instanceof HTMLInputElement && cursor !== undefined && cursor !== null) target.setSelectionRange(cursor, cursor);
+    }
   }
 
-  private button(text: string, action: () => void): HTMLButtonElement {
-    const button = element("button", "", text);
-    button.type = "button";
-    button.addEventListener("click", action);
-    return button;
+  private contributors(mask: number): Entity[] {
+    let members = this.members.get(mask);
+    if (!members) {
+      members = contributors(this.analysis!, mask);
+      // Only cache the inspected/hovered bucket, not 50 overlapping entity lists.
+      this.members.clear();
+      this.members.set(mask, members);
+    }
+    return members;
   }
 
   private combinationLabel(combination: Combination): string {
     const analysis = this.analysis!;
-    const included = analysis.sets.filter((_, bit) => combination.mask & (1 << bit)).map(set => set.label);
-    const excluded = analysis.sets.filter((_, bit) => !(combination.mask & (1 << bit))).map(set => set.label);
+    const named = analysis.sets.map((set, bit) => `${String.fromCharCode(65 + bit)}: ${set.label}`);
+    const included = named.filter((_, bit) => combination.mask & (1 << bit));
+    const excluded = named.filter((_, bit) => !(combination.mask & (1 << bit)));
     return [
       this.t(analysis.options.inclusive ? "Inclusive" : "Exact"),
       included.length ? this.t("Included", included.join(" + ")) : this.t("None"),
-      analysis.options.inclusive ? this.t("Unrestricted") : this.t("Excluded", excluded.join(", ") || this.t("None")),
+      analysis.options.inclusive ? this.t("Unrestricted") : this.t("Excluded", excluded.join(", ") || this.t("NoneShort")),
       `${this.t("Count")}: ${this.number.format(combination.count)}`,
       `${this.t("Share")}: ${this.percent.format(combination.count / analysis.universe)}`,
       ...(this.parsed?.highlights ? [`${this.t("Highlighted")}: ${this.number.format(combination.highlighted)}`] : [])
     ].join(". ");
   }
 
-  private bindTooltip(button: HTMLButtonElement, combination: Combination): void {
+  private captionLabel(combination: Combination): string {
+    const analysis = this.analysis!;
+    const included = analysis.sets.flatMap((set, bit) => combination.mask & (1 << bit)
+      ? [`${String.fromCharCode(65 + bit)}: ${set.label}`] : []);
+    return [included.join(" + ") || this.t("None"),
+      `${this.t("Count")}: ${this.number.format(combination.count)}`,
+      `${this.t("Share")}: ${this.percent.format(combination.count / analysis.universe)}`,
+      ...(this.parsed?.highlights ? [`${this.t("Highlighted")}: ${this.number.format(combination.highlighted)}`] : [])
+    ].join(". ");
+  }
+
+  private bindTooltip(column: HTMLButtonElement, description: string, getEntities: () => Entity[], title = this.t("Combinations")): void {
     const show = (event: PointerEvent) => {
       if (!this.host.tooltipService.enabled()) return;
-      const selection = selectionKeys(contributors(this.analysis!, combination.mask));
+      const selection = selectionKeys(getEntities());
       const identities = selection.keys.flatMap(key => {
         const id = this.parsed?.identities.get(key);
         return id ? [id] : [];
       });
       this.host.tooltipService.show({
         coordinates: [event.clientX, event.clientY], isTouchEvent: event.pointerType === "touch", identities,
-        dataItems: [{ displayName: this.t("Combinations"), value: this.combinationLabel(combination) },
-          { displayName: this.t("Universe", this.number.format(this.analysis!.universe)), value: this.t("Context") }]
+        dataItems: [
+          { displayName: title, value: description },
+          { displayName: this.t("Universe", this.number.format(this.analysis!.universe)), value: this.t("Context") },
+          { displayName: this.t("DataStatus"), value: this.t(this.parsed!.segmented || this.analysis!.invalid || this.analysis!.dropped ? "Partial" : "Complete") }
+        ]
       });
     };
-    button.addEventListener("pointerenter", show);
-    button.addEventListener("pointerleave", () => this.host.tooltipService.hide({ immediately: true, isTouchEvent: false }));
+    column.addEventListener("pointerenter", show);
+    column.addEventListener("pointerdown", event => { if (event.pointerType === "touch") show(event); });
+    column.addEventListener("pointerleave", event => this.host.tooltipService.hide({ immediately: true, isTouchEvent: event.pointerType === "touch" }));
+    column.addEventListener("blur", () => this.host.tooltipService.hide({ immediately: true, isTouchEvent: false }));
   }
 
-  private bindContext(button: HTMLButtonElement, entities: Entity[]): void {
+  private bindContext(target: HTMLButtonElement, getEntities: () => Entity[]): void {
     const open = (x: number, y: number) => {
       if (!this.interactionsAllowed()) return;
-      const entity = entities.find(item => item.identityKeys.size > 0);
+      const entity = getEntities().find(item => item.identityKeys.size > 0);
       const key = entity?.identityKeys.values().next().value;
       const id = key ? this.parsed?.identities.get(key) : undefined;
-      if (!id || !entity) { this.status.textContent = this.t("MissingIdentity"); return; }
-      this.status.textContent = `${this.t("Context")} ${this.t("ContextEntity", entity.label)}`;
-      Promise.resolve(this.manager.showContextMenu(id, { x, y })).then(undefined, () => {
-        if (!this.destroyed) this.status.textContent = this.t("SelectionFailed");
+      if (!id || !entity) { this.notify("MissingIdentity"); return; }
+      this.layout!.status.textContent = `${this.t("Context")} ${this.t("ContextEntity", entity.label)}`;
+      const revision = this.revision;
+      Promise.resolve().then(() => {
+        if (!this.destroyed && revision === this.revision) return this.manager.showContextMenu(id, { x, y });
+        return undefined;
+      }).then(undefined, () => {
+        if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
       });
     };
-    button.addEventListener("contextmenu", event => { event.preventDefault(); open(event.clientX, event.clientY); });
-    button.addEventListener("keydown", event => {
+    target.addEventListener("contextmenu", event => { event.preventDefault(); open(event.clientX, event.clientY); });
+    target.addEventListener("keydown", event => {
       if (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
         event.preventDefault();
-        const bounds = button.getBoundingClientRect();
+        const bounds = target.getBoundingClientRect();
         open(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
       }
     });
   }
 
-  private showDetails(entities: Entity[]): void {
-    this.detail.hidden = false;
-    this.detail.replaceChildren(element("h3", "", this.t("Details")),
-      element("p", "", this.t("DetailsCount", this.number.format(Math.min(entities.length, LIMITS.details)), this.number.format(entities.length))),
-      this.button(this.t("Close"), () => {
-        this.detail.hidden = true;
-        this.bars.find(bar => bar.mask === this.focusedMask)?.button.focus();
-      }));
+  private showDetails(mask: number, focus: boolean, setKey?: string): void {
+    if (!this.layout?.detail.isConnected) return;
+    if (mask !== this.detailMask || setKey !== this.detailSetKey) { this.detailSearch = ""; this.detailPage = 0; }
+    this.detailMask = mask;
+    this.detailSetKey = setKey;
+    const detail = this.layout.detail;
+    detail.hidden = false;
+    const title = element("div", "detail-title");
+    const set = setKey === undefined ? undefined : this.analysis!.sets.find(item => item.key === setKey);
+    title.append(element("h3", "", set ? this.t("SetDetails", set.label) : this.t("Details")));
+    const close = button(this.t("Close"), "close-details");
+    close.addEventListener("click", () => {
+      detail.hidden = true;
+      this.detailMask = undefined;
+      this.detailSetKey = undefined;
+      const returnTarget = setKey === undefined ? this.layout?.bars.find(bar => bar.combination.mask === this.focusedMask)
+        : this.layout?.sets.find(item => item.key === setKey);
+      returnTarget?.button.focus();
+    });
+    title.append(close);
+    const label = element("label", "search-label", this.t("SearchEntities"));
+    const search = element("input", "entity-search");
+    search.type = "search";
+    search.maxLength = LIMITS.text;
+    search.value = this.detailSearch;
+    search.dataset.focusKey = "entity-search";
+    label.append(search);
+    const count = element("p", "details-count");
+    count.setAttribute("aria-live", "polite");
     const list = element("ul", "contributors");
-    for (const entity of entities.slice(0, LIMITS.details)) {
-      const item = element("li");
-      const button = element("button", "", entity.label);
-      button.type = "button";
-      button.setAttribute("aria-label", this.t("SelectEntity", entity.label));
-      button.addEventListener("click", event => this.select([entity], event.ctrlKey || event.metaKey));
-      this.bindContext(button, [entity]);
-      item.append(button);
-      list.append(item);
-    }
-    this.detail.append(list);
-    // Keep focus on the combination; Tab reaches the contributor controls in document order.
+    const pagination = element("div", "pagination");
+    detail.replaceChildren(title, label, count, list, pagination);
+    const draw = () => {
+      const members = setKey === undefined ? this.contributors(mask)
+        : this.analysis!.entities.filter(entity => Boolean(entity.mask & mask));
+      const query = this.detailSearch.toLocaleLowerCase(this.host.locale);
+      const matching = members.filter(entity => `${entity.label} ${entity.key}`.toLocaleLowerCase(this.host.locale).includes(query));
+      this.detailPage = Math.min(this.detailPage, Math.max(0, Math.ceil(matching.length / LIMITS.details) - 1));
+      const start = this.detailPage * LIMITS.details;
+      const displayed = matching.slice(start, start + LIMITS.details);
+      count.textContent = this.t("DetailRange", this.number.format(matching.length ? start + 1 : 0),
+        this.number.format(start + displayed.length), this.number.format(matching.length), this.number.format(members.length));
+      list.replaceChildren();
+      for (const entity of displayed) {
+        const item = element("li");
+        const choose = button(entity.label, `entity:${entity.key}`);
+        choose.setAttribute("aria-label", this.t("SelectEntity", entity.label));
+        choose.title = `${this.t("RawValue")}: ${entity.key}. ${this.t("IdentityCount", this.number.format(entity.identityKeys.size))}`;
+        choose.addEventListener("click", event => this.select([entity], event.ctrlKey || event.metaKey));
+        this.bindContext(choose, () => [entity]);
+        item.append(choose);
+        list.append(item);
+      }
+      const previous = button(this.t("Previous"), "previous-entities");
+      previous.disabled = this.detailPage === 0;
+      previous.addEventListener("click", () => { this.detailPage--; draw(); search.focus(); });
+      const next = button(this.t("Next"), "next-entities");
+      next.disabled = start + LIMITS.details >= matching.length;
+      next.addEventListener("click", () => { this.detailPage++; draw(); search.focus(); });
+      pagination.replaceChildren(previous, next);
+    };
+    search.addEventListener("input", () => { this.detailSearch = search.value; this.detailPage = 0; draw(); });
+    draw();
+    if (focus) search.focus();
   }
 
   private select(entities: Entity[], multi: boolean): void {
     if (!this.interactionsAllowed()) return;
+    if (this.nativeBusy) { this.notify("SelectionPending"); return; }
     const selection = selectionKeys(entities);
-    if (selection.reason) {
-      this.status.textContent = this.t(selection.reason === "limit" ? "SelectionLimit" : "MissingIdentity");
-      return;
-    }
+    if (selection.reason) { this.notify(selection.reason === "limit" ? "SelectionLimit" : "MissingIdentity"); return; }
+    this.selected = this.manager.getSelectionIds().filter(isNativeId);
     if (multi && new Set([...this.selected.map(id => id.getKey()), ...selection.keys]).size > LIMITS.identities) {
-      this.status.textContent = this.t("SelectionLimit");
+      this.notify("SelectionLimit");
       return;
     }
     const ids = selection.keys.map(key => this.parsed!.identities.get(key));
-    if (ids.some(id => !id)) { this.status.textContent = this.t("MissingIdentity"); return; }
+    if (ids.some(id => !id)) { this.notify("MissingIdentity"); return; }
     const revision = this.revision;
-    Promise.resolve(this.manager.select(ids.filter((id): id is NativeId => id !== undefined), multi)).then(
+    this.nativeBusy = true;
+    Promise.resolve().then(() => this.destroyed || revision !== this.revision ? []
+      : this.manager.select(ids.filter((id): id is NativeId => id !== undefined), multi)).then(
       selected => {
         if (this.destroyed || revision !== this.revision) return;
         this.selected = selected.filter(isNativeId);
-        this.status.textContent = "";
+        if (this.layout) this.layout.status.textContent = "";
         this.paintSelection();
       },
-      () => { if (!this.destroyed && revision === this.revision) this.status.textContent = this.t("SelectionFailed"); }
-    );
+      () => { if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed"); }
+    ).finally(() => this.finishNative());
   }
 
   private clear(): void {
     if (!this.interactionsAllowed()) return;
-    Promise.resolve(this.manager.clear()).then(() => {
-      if (this.destroyed) return;
+    if (this.nativeBusy) { this.clearRequested = true; this.notify("ClearQueued"); return; }
+    this.nativeBusy = true;
+    const revision = this.revision;
+    Promise.resolve().then(() => {
+      if (!this.destroyed && revision === this.revision) return this.manager.clear();
+      return undefined;
+    }).then(() => {
+      if (this.destroyed || revision !== this.revision) return;
       this.selected = [];
-      this.status.textContent = "";
+      if (this.layout) this.layout.status.textContent = "";
       this.paintSelection();
-    }, () => { if (!this.destroyed) this.status.textContent = this.t("SelectionFailed"); });
+    }, () => { if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed"); })
+      .finally(() => this.finishNative());
+  }
+
+  private finishNative(): void {
+    this.nativeBusy = false;
+    if (!this.destroyed && this.clearRequested) { this.clearRequested = false; this.clear(); }
   }
 
   private paintSelection(): void {
-    if (!this.analysis || !this.parsed) return;
+    if (!this.analysis || !this.parsed || !this.layout) return;
     const selectedKeys = new Set(this.selected.map(id => id.getKey()));
+    const unmatched = this.selected.filter(id => !this.parsed!.identities.has(id.getKey()));
     const selectedEntities = this.analysis.entities.filter(entity => [...entity.identityKeys].some(key => {
       if (selectedKeys.has(key)) return true;
       const id = this.parsed!.identities.get(key);
-      return id && this.selected.some(selected => selected.includes(id) || id.includes(selected));
+      return id && unmatched.some(selected => selected.includes(id) || id.includes(selected));
     }));
-    for (const bar of this.bars) {
-      const selected = selectedEntities.some(entity => this.analysis!.options.inclusive
-        ? (entity.mask & bar.mask) === bar.mask : entity.mask === bar.mask);
-      bar.button.classList.toggle("selected", selected);
-      bar.button.classList.toggle("muted", this.selected.length > 0 && !selected);
-      bar.button.setAttribute("aria-pressed", String(selected));
+    for (const bar of this.layout.bars) {
+      const count = selectedEntities.filter(entity => this.analysis!.options.inclusive
+        ? (entity.mask & bar.combination.mask) === bar.combination.mask : entity.mask === bar.combination.mask).length;
+      bar.button.classList.toggle("selected", count > 0);
+      bar.button.classList.toggle("muted", this.selected.length > 0 && count === 0);
+      bar.button.setAttribute("aria-pressed", count === 0 ? "false" : count < bar.combination.count ? "mixed" : "true");
+    }
+    for (const set of this.layout.sets) {
+      const count = selectedEntities.filter(entity => Boolean(entity.mask & (1 << set.index))).length;
+      set.button.classList.toggle("selected", count > 0);
+      set.button.setAttribute("aria-pressed", count === 0 ? "false" : count < this.analysis.sets[set.index]!.size ? "mixed" : "true");
     }
   }
 
   private rove(): void {
-    this.bars.forEach(bar => { bar.button.tabIndex = bar.mask === this.focusedMask ? 0 : -1; });
+    this.layout?.bars.forEach(bar => { bar.button.tabIndex = bar.combination.mask === this.focusedMask ? 0 : -1; });
   }
 
   private navigate(event: KeyboardEvent, mask: number): void {
-    const index = this.bars.findIndex(bar => bar.mask === mask);
+    const bars = this.layout?.bars ?? [];
+    const index = bars.findIndex(bar => bar.combination.mask === mask);
     const direction = this.root.dir === "rtl" ? -1 : 1;
     let next = index;
     if (event.key === "ArrowRight") next += direction;
     else if (event.key === "ArrowLeft") next -= direction;
     else if (event.key === "Home") next = 0;
-    else if (event.key === "End") next = this.bars.length - 1;
+    else if (event.key === "End") next = bars.length - 1;
     else return;
     event.preventDefault();
-    const target = this.bars[Math.max(0, Math.min(next, this.bars.length - 1))];
+    const target = bars[Math.max(0, Math.min(next, bars.length - 1))];
     if (target) {
-      this.focusedMask = target.mask;
+      this.focusedMask = target.combination.mask;
       this.rove();
       target.button.focus();
       target.button.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
@@ -411,26 +455,34 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     if (this.pendingFetch || !this.parsed?.segmented || this.parsed.received >= LIMITS.rows) return;
     this.pendingFetch = true;
     this.rejectedFetch = false;
-    // Host aggregation supplies complete snapshots. Never append them locally or double-count overlap.
+    // Aggregate snapshots replace processed rows; no local append or automatic loop.
     const accepted = this.host.fetchMoreData(true);
     if (!accepted) { this.pendingFetch = false; this.rejectedFetch = true; }
     this.render();
   }
 
+  private notify(key: Parameters<ReturnType<typeof localizer>>[0]): void {
+    if (this.layout) this.layout.status.textContent = this.t(key);
+  }
+
   private interactionsAllowed(): boolean {
     if (this.host.hostCapabilities?.allowInteractions !== false) return true;
-    this.status.textContent = this.t("InteractionsDisabled");
+    this.notify("InteractionsDisabled");
     return false;
   }
 
   public destroy(): void {
     this.destroyed = true;
     this.revision++;
+    this.clearRequested = false;
     this.host.tooltipService.hide({ immediately: true, isTouchEvent: false });
+    this.root.replaceChildren();
     this.root.remove();
+    this.layout = undefined;
     this.parsed = undefined;
     this.analysis = undefined;
-    this.dataView = undefined;
-    this.bars = [];
+    this.metadataView = undefined;
+    this.selected = [];
+    this.members.clear();
   }
 }

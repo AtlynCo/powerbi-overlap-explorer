@@ -1,0 +1,5 @@
+.schema-cache/
+.pbi/
+**/.pbi/
+**/cache.abf
+**/localSettings.json
