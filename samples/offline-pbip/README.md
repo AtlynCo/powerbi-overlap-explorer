@@ -132,6 +132,40 @@ It is not a general TMDL parser or a Power BI rendering engine.
 
 ## Required manual host gate — not yet established by source validation
 
+### Provisional structural correction, 2026-09-09
+
+Official Microsoft TOM 19.117.0 reproduced an `InvalidLineType /
+ReferenceObject` failure at the indented `ref table` declarations in
+`model.tmdl`. Those references are now at document root. TOM deserialization
+then accepted both tables and their expected columns/source mappings, measure
+definitions and import M partitions. It did **not** execute M or DAX, refresh
+data, open Desktop, or render the report.
+
+`definition/version.json` was already present and declares PBIR 4.0.0.
+The validator now explicitly requires that file/version and root-level table
+references instead of relying solely on enumerating whatever schema files
+exist. Regression cases cover the previously accepted indented-reference and
+missing-version shapes.
+
+This is a **provisional sample-only correction**, using the unchanged
+`1.0.0.0` unlicensed rendering package. The earlier sealed bundle is not
+rewritten. The owner has chosen paid access through existing Atlyn
+subscriptions, but the shared licensing contract is pending; this sample is
+not a final paid/submission candidate.
+
+With an already available official TOM assembly and its sibling DLLs, run
+in a fresh PowerShell process; the script installs nothing and connects to
+no model server:
+
+```powershell
+pwsh -NoProfile -File scripts\validate-sample-tom.ps1 -AssemblyPath <existing-official-Microsoft.AnalysisServices.Tabular.dll>
+npm run validate:sample -- --offline --evidence-dir .tmp\sample-preflight
+```
+
+The explicit evidence directory keeps provisional preflight output separate
+from the original rendering evidence. The coordinator still owns all native UI
+work and genuine PBIX production.
+
 Schema-valid PBIR does **not** establish that Desktop will successfully load
 private-visual resources, parse TMDL, refresh, execute semantic queries, or
 render formatting. Public schemas deliberately leave some native visual

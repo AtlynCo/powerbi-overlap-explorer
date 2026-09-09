@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { parseArgs } from "node:util";
 import Ajv from "ajv";
 import { readPackage } from "./read-package.mjs";
 import { authoredPage, fixtures, packageFiles, reportRoot, sampleRoot, sha256, visualGuid } from "./prepare-sample.mjs";
@@ -9,6 +10,16 @@ import { authoredPage, fixtures, packageFiles, reportRoot, sampleRoot, sha256, v
 const readJson = async file => JSON.parse(await readFile(file, "utf8"));
 const cacheRoot = path.join(sampleRoot, ".schema-cache");
 const publicPrefix = "https://developer.microsoft.com/json-schemas/";
+
+export function validateSampleStructure(model, version) {
+  assert.match(model, /^model Model\r?$/m, "Required model declaration is missing");
+  assert.doesNotMatch(model, /^[ \t]+ref[ \t]+table\b/m, "TMDL ref table declarations must be at document root, not indented");
+  const tables = [...model.matchAll(/^ref table (\w+)[ \t]*\r?$/gm)].map(match => match[1]).sort();
+  assert.deepEqual(tables, fixtures.map(fixture => fixture.table).sort(), "Required root-level table references are missing or duplicated");
+  assert.ok(version && typeof version === "object", "Required PBIR definition/version.json is missing");
+  assert.equal(version.$schema, `${publicPrefix}fabric/item/report/definition/versionMetadata/1.0.0/schema.json`);
+  assert.equal(version.version, "4.0.0", "Unexpected PBIR definition version");
+}
 
 async function loadSchema(url, offline, records) {
   assert.ok(url.startsWith(publicPrefix), `Unexpected schema host: ${url}`);
@@ -159,7 +170,11 @@ async function validatePackage(embeddedOnly) {
   return manifest.sha256;
 }
 
-export async function validateSample({ embeddedOnly = false, offline = false } = {}) {
+export async function validateSample({ embeddedOnly = false, offline = false,
+  evidenceDirectory = path.resolve(".tmp", "release-evidence", "final") } = {}) {
+  validateSampleStructure(
+    await readFile(path.join(sampleRoot, "OverlapSample.SemanticModel", "definition", "model.tmdl"), "utf8"),
+    await readJson(path.join(reportRoot, "definition", "version.json")));
   const hash = await validatePackage(embeddedOnly);
   await validateModel();
   await validateBindings();
@@ -180,7 +195,7 @@ export async function validateSample({ embeddedOnly = false, offline = false } =
     assert.ok(validate(value), `${path.relative(sampleRoot, file)}: ${ajv.errorsText(validate.errors)}`);
     validated++;
   }
-  const evidenceRoot = path.resolve(".tmp", "release-evidence", "final");
+  const evidenceRoot = path.resolve(evidenceDirectory);
   await mkdir(evidenceRoot, { recursive: true });
   await writeFile(path.join(evidenceRoot, "sample-validation.json"), JSON.stringify({
     validatedAt: new Date().toISOString(), packageSha256: hash, matchesCurrentDist: !embeddedOnly,
@@ -194,7 +209,8 @@ export async function validateSample({ embeddedOnly = false, offline = false } =
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const args = process.argv.slice(2);
-  assert.ok(args.every(arg => ["--embedded-only", "--offline"].includes(arg)), "Usage: node scripts/validate-sample.mjs [--embedded-only] [--offline]");
-  await validateSample({ embeddedOnly: args.includes("--embedded-only"), offline: args.includes("--offline") });
+  const { values } = parseArgs({ options: {
+    "embedded-only": { type: "boolean" }, offline: { type: "boolean" }, "evidence-dir": { type: "string" },
+  } });
+  await validateSample({ embeddedOnly: values["embedded-only"], offline: values.offline, evidenceDirectory: values["evidence-dir"] });
 }
