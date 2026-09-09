@@ -1,0 +1,23 @@
+Entity ID,Set Name,Cohort
+U001,Search,Pilot
+U001,Share,Pilot
+U002,Search,General
+U003,Share,Pilot
+U003,Automate,Pilot
+U004,Search,General
+U004,Share,General
+U004,Automate,General
+U005,Automate,Pilot
+U006,Search,General
+U006,Automate,General
+U007,Share,General
+U008,,Pilot
+U009,Search,Pilot
+U009,Search,Pilot
+U010,Search,General
+U010,Share,General
+U011,Export,Pilot
+U012,Export,General
+U012,Search,General
+U012,Share,General
+U012,Automate,General

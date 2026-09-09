@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <title>Atlyn Overlap Explorer: bars above a membership dot matrix</title>
+  <rect x="0" y="0" width="20" height="20" fill="#FFFFFF"/>
+  <rect x="3" y="3" width="3" height="5" fill="#176B87"/>
+  <rect x="8" y="1" width="3" height="7" fill="#176B87"/>
+  <rect x="13" y="4" width="3" height="4" fill="#176B87"/>
+  <rect x="9" y="11.5" width="1" height="5" fill="#172D38"/>
+  <rect x="14" y="11.5" width="1" height="5" fill="#172D38"/>
+  <circle cx="4.5" cy="11.5" r="1.5" fill="#172D38"/>
+  <circle cx="4.5" cy="16.5" r="1.5" fill="#CBD5DB"/>
+  <circle cx="9.5" cy="11.5" r="1.5" fill="#172D38"/>
+  <circle cx="9.5" cy="16.5" r="1.5" fill="#172D38"/>
+  <circle cx="14.5" cy="11.5" r="1.5" fill="#172D38"/>
+  <circle cx="14.5" cy="16.5" r="1.5" fill="#172D38"/>
+</svg>
