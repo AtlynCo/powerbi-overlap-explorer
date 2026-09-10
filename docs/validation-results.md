@@ -85,8 +85,14 @@ PDF/PowerPoint/image export and tenant-policy behavior remain **unperformed**.
 Schema-valid PBIP and labeled host-mock previews do not close these gates.
 The coordinator owns these checks and live Marketplace submission.
 
-Source/product licensing, owner-approved public policies, price/licensing
-model, support responsiveness and publication authorization remain owner
-decisions. Nothing has been submitted to Partner Center/AppSource or publicly
-released. See [manual validation](manual-validation.md),
+**Owner update, 2026-09-10:** existing Atlyn storefront subscriptions with
+ungated runtime and free shared viewing are approved. Paid-author identity
+checks and runtime licensing integration are not required or pending. No
+package rebuild/version change accompanies this documentation update.
+The repository declares no first-party license identifier; applicable
+existing terms/public policies, support, native/PBIX work and final assets
+(including the required Extra PowerBI badge) remain in the parent's final
+publication gate. Nothing in these local results authorizes submission or
+release. See [acquisition/runtime](acquisition-and-runtime.md),
+[manual validation](manual-validation.md),
 [release review](release-review.md) and [submission dossier](submission-dossier.md).

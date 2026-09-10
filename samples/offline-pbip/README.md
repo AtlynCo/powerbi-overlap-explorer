@@ -148,10 +148,13 @@ exist. Regression cases cover the previously accepted indented-reference and
 missing-version shapes.
 
 This is a **provisional sample-only correction**, using the unchanged
-`1.0.0.0` unlicensed rendering package. The earlier sealed bundle is not
-rewritten. The owner has chosen paid access through existing Atlyn
-subscriptions, but the shared licensing contract is pending; this sample is
-not a final paid/submission candidate.
+`1.0.0.0` renderer. The earlier sealed bundle is not rewritten. On 2026-09-10
+the owner approved **existing Atlyn storefront subscriptions with an ungated
+runtime and free shared viewing**, without paid-author identity enforcement.
+No runtime licensing integration remains pending; the current renderer is
+intended. Native/PBIX, final assets and submission still require the parent's
+final gate. Historical frozen descriptions remain untouched; see the
+[current acquisition/runtime decision](../../docs/acquisition-and-runtime.md).
 
 With an already available official TOM assembly and its sibling DLLs, run
 in a fresh PowerShell process; the script installs nothing and connects to

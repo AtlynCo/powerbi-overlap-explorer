@@ -5,10 +5,14 @@ intersection bars align with connected membership dots; the margin shows each
 retained set's distinct-entity size. Counting and geometry are original
 implementations, not an embedded or copied UpSet library.
 
-**Status:** version `1.0.0.0`, private evaluation source. Not certified and not an
-AppSource listing. The owner has not selected a source license. Licensing,
-required owner-approved public policies, and real Power BI validation remain
-publication blockers; see [release review](docs/release-review.md).
+**Status:** version `1.0.0.0`, private source; not certified or submitted.
+The owner approved **existing Atlyn storefront subscriptions with an ungated
+runtime and free shared viewing**. Runtime licensing is not a blocker and
+there is no paid-author identity enforcement. The repository declares no
+first-party LICENSE file or SPDX identifier. Native validation, a genuine PBIX,
+final assets and the coordinator's publication gate remain; see
+[acquisition and runtime](docs/acquisition-and-runtime.md) and
+[release review](docs/release-review.md).
 
 ## Quick start
 
@@ -176,6 +180,12 @@ claim. Real screen-reader and Power BI host checks remain in the
 
 ## Privacy, support, and distribution
 
+Acquisition is handled through existing Atlyn storefront subscriptions,
+outside the visual. The renderer does not verify author/viewer subscriptions
+or require licence keys; shared viewers face no Atlyn runtime payment gate.
+Power BI's own licensing and report permissions still apply. The owner-required
+**Extra PowerBI** badge awaits the coordinator's approved asset and placement.
+
 The visual declares no privileges or external scripts. It does not request
 network access, external fonts, telemetry, or local storage; data processing
 stays inside the visual's host-provided session. Normal Power BI service and
@@ -280,6 +290,7 @@ The original [SVG icon](assets/icon.svg) produces the required 20×20 PNG with
 - [Current Microsoft submission requirements](docs/certification-requirements.md)
 - [Draft listing and certification dossier](docs/submission-dossier.md)
 - [License and provenance review](docs/licensing.md)
+- [Owner-approved acquisition and ungated runtime](docs/acquisition-and-runtime.md)
 - [Third-party notices](THIRD-PARTY-NOTICES.md)
 - [Synthetic CSVs and expected results](samples/README.md)
 - [Self-contained offline PBIP sample](samples/offline-pbip/README.md)

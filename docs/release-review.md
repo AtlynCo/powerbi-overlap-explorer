@@ -1,17 +1,21 @@
 # Release and certification review
 
-Review prepared **2026-09-09**.
+Local engineering review prepared **2026-09-09**; owner-model update **2026-09-10**.
 
 ## Current decision
 
-**NO-GO for public distribution, Marketplace submission and certification.**
-This does not prevent local candidate engineering/review. No Microsoft
-approval, native-host validation, legal approval or competitive superiority
-is claimed. A package version, a script named `certification`, or a historical
-test pass does not establish readiness.
+**HOLD for the coordinator's final native/assets/publication gate.**
+The owner approved **storefront subscriptions, ungated visuals**: external
+acquisition through existing Atlyn subscriptions, free shared viewing, and no
+paid-author identity enforcement. **Runtime licensing is no longer a blocker;
+the current renderer is intended.** No licensing APIs, keys, signer, AAD,
+feature gates or runtime calls are to be added. This approval is not Microsoft
+certification or native-host proof; see [the decision record](acquisition-and-runtime.md).
 
-The coordinator's release branch is **`release-quality-overlap`**, with
-working baseline `origin/main` at `4356e10`, following the merged prior PR.
+The original rendering baseline was `4356e10`. The quality/sample work through
+`8026329` was merged by PR #2 into `origin/main` at `b7a5df2`; that historical
+merge does not authorize further main/ref changes, merges or submission.
+This documentation follow-up does not change the renderer or frozen bundles.
 The final package SHA-256 is
 `ae2f1c09694fb5cade37bd1bbe30c18d212e8920f7f9a9cadd33a0234f9cebf0`.
 The release seal records the final full source commit and archive/file hashes.
@@ -48,9 +52,10 @@ the public support channel.
 Reviewed candidate metadata is version `1.0.0.0`, GUID
 `AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`; SDK npm package
 5.11.1 exposes API contract 5.11.0. Verify these against the final archive.
-Source/distribution license, product terms, privacy and price are **not**
-authorized decisions. Microsoft utility dependency licenses do not license
-this repository.
+Acquisition and ungated runtime are owner-approved. The repository still has
+no first-party LICENSE/LICENCE file or `package.json` license identifier;
+applicable existing terms and public-policy references belong in the owner's
+publication paperwork. Dependency licenses do not license this repository.
 
 ## Submission-blocker matrix
 
@@ -59,8 +64,8 @@ failure. Do not close a native or owner gate with an automated local check.
 
 | ID | Gate / consequence | Owner | Required closure evidence | Current status |
 | --- | --- | --- | --- | --- |
-| B01 | Source/distribution rights; blocks public distribution | Product owner/legal | Approved license and provenance/dependency notice review for the exact source/package | **BLOCKED: owner decision** |
-| B02 | Product EULA/contract, privacy and acquisition model; blocks listing | Product owner/legal | Approved contract choice/document, public HTTPS privacy URL, actual pricing/purchase disclosures and market decisions | **BLOCKED: owner decision** |
+| B01 | First-party terms and provenance record | Product owner/legal | Applicable existing terms and dependency notice review; no invented relicensing | **NO FIRST-PARTY IDENTIFIER/TERMS DECLARED IN REPO**; not a runtime integration task |
+| B02 | Acquisition/runtime model and listing paperwork | Product owner/legal | Existing storefront subscription acquisition, ungated shared viewing, applicable EULA/privacy/disclosures | **ACQUISITION/RUNTIME APPROVED**; publication documents remain for the parent gate, not licensing-code implementation |
 | B03 | Publisher authority and public support; blocks submission | Publisher owner | Authorized account/legal entity; working public support and responsive contact; secure reviewer-access plan | **PENDING**; metadata verified, responsiveness/account authority not established |
 | B04 | Final local correctness and failure-state proof | Engineering coordinator | Final revision-linked type/lint/unit/package/Chromium host-mock logs, all intentional limits and adversarial/selection/lifecycle cases | **LOCAL PASS**: 47 unit / 30 packaged-browser cases; source-linked release seal |
 | B05 | Certification build/repository/audit compliance | Engineering coordinator | Current latest API/tools review; required commands/files/plugin config; no moderate/high audit warnings; safe source/bundle; exact rebuild/package correspondence | **LOCAL PASS**: explicit `eslint`, current reviewed SDK/tools, documented custom package path, zero audit vulnerabilities; Microsoft approval not implied |
@@ -68,7 +73,7 @@ failure. Do not close a native or owner gate with an automated local check.
 | B07 | Mobile/touch/accessibility/export coverage | Native validation coordinator | N14/N16 outcomes on applicable supported hosts; tenant/certification restrictions honestly recorded; no false conformance/export claim | **NOT RUN** |
 | B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PASS / NATIVE PENDING**: 20 definitions, two bound pages, exact embedded archive/resources; native acceptance remains open |
 | B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **BLOCKED: no verified native PBIX** |
-| B10 | Listing icon/logo/screenshots | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review | **LOCAL ASSETS COMPLETE / NATIVE SCREENSHOTS PENDING**; three correctly sized local previews are explicitly host-mock labeled |
+| B10 | Listing icon/logo/screenshots and Extra PowerBI badge | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review; owner-required Extra PowerBI badge with approved asset/placement | **PARENT ASSETS PENDING**; local previews are host-mock labeled; do not substitute a Microsoft certification badge |
 | B11 | Source/package/evidence integrity | Engineering coordinator | Immutable [dossier manifest](submission-dossier.md#immutable-evidence-manifest), final source/archive/package/input/media hashes and qualified evidence classes | Recorded by the clean-commit, write-once release seal; final location/hash accompanies the PR handoff |
 | B12 | Listing and certification handoff | Product/publisher + coordinator | Approved accurate listing/notes, resolved required gates, lowercase `certification` branch matching frozen package/source; explicit instruction to submit | **BLOCKED pending prior gates and owner authorization** |
 | B13 | Certification claims/badge | Microsoft + publisher | Actual approval for this version, retained decision | **NOT SUBMITTED / NOT CERTIFIED** |
@@ -141,5 +146,6 @@ competitor counts/performance, or a “best in class” result.
    source access. This dossier prepares that handoff; it does not submit,
    grant access, accept contracts or publish.
 
-No approval or badge may be shown until the corresponding actual Microsoft
-decision is recorded.
+No Microsoft certification approval or certification badge may be shown
+before the actual Microsoft decision. The required Extra PowerBI badge is
+separate and must use the coordinator's forthcoming approved asset/placement.
