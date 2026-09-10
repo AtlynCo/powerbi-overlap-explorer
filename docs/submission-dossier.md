@@ -1,17 +1,22 @@
 # Submission dossier — draft, not submitted
 
-Prepared **2026-09-09**. All copy is proposed for owner review. This document
-does not select a license, accept a contract, set a price, grant reviewer
-access, publish an offer, or claim certification. Native validation and
-release-specific evidence remain gates in [release review](release-review.md).
+Prepared **2026-09-09**, updated for the **2026-09-10 owner approval**:
+external acquisition through existing Atlyn subscriptions, ungated runtime,
+and free shared viewing without paid-author identity enforcement. This
+document does not select a new license, invent commercial terms, grant
+reviewer access, publish an offer, or claim certification. Native/PBIX,
+assets and the parent's final gate remain in [release review](release-review.md).
 
 The current release branch is **`release-quality-overlap`**. The coordinator's
 [final local progress](release-review.md#coordinator-reported-local-progress)
 records 47 unit / 30 packaged-browser passes, exact authored sample/resource
-checks, inspected images and regenerated measurements. The clean-source
-release seal supplies the final commit, package/assets/evidence and hashes.
-Owner approvals, native tests, genuine PBIX and native listing screenshots
-remain unresolved.
+checks, inspected images and regenerated measurements. The original
+clean-source rendering seal records its tested commit, package/assets/evidence
+and hashes; the source-only sample/version correction does not rewrite that seal.
+Runtime licensing integration is not pending. The current renderer is
+intended, with no repackage/version change for this documentation update.
+The native version A/B restored pages/refresh/initial rendering and produced
+a probe PBIX. Final native/PBIX acceptance and assets remain parent-owned.
 
 ## Confirmed identity and unresolved business fields
 
@@ -24,11 +29,13 @@ remain unresolved.
 | Package version / GUID | Reviewed candidate `1.0.0.0` / `AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`; final archive must agree |
 | API | SDK npm 5.11.1 / manifest API 5.11.0; record final actual values |
 | Publisher legal entity/account/authority | **OWNER DECISION / VERIFICATION REQUIRED** |
-| Source and distribution license | **OWNER DECISION REQUIRED**; no license inferred from dependencies |
+| Source and distribution license | **No first-party LICENSE/LICENCE file, package `license` field or SPDX identifier declared**; no terms invented or inferred from dependencies |
 | Product EULA / standard contract selection | **OWNER LEGAL APPROVAL REQUIRED** |
 | Public HTTPS privacy policy | **OWNER APPROVAL AND URL REQUIRED** |
-| Price / purchase model / availability markets | **OWNER DECISION REQUIRED**; no free, paid, subscription, SLA or refund terms invented |
-| Certification request | **NOT SUBMITTED**; optional process, not an existing designation |
+| Acquisition model | **APPROVED:** existing Atlyn storefront subscriptions, outside the visual |
+| Runtime / shared viewing | **APPROVED:** ungated authors/viewers, free shared viewing, no paid-author identity verification or licence calls |
+| Prices / contract details / availability markets | Use owner-supplied existing terms; no amounts, tiers, SLA or refund clauses invented |
+| Certification target | **OWNER REQUIRED:** official **Power BI certified** designation via Partner Center's **Request Power BI certification** checkbox; **NOT SUBMITTED / NOT GRANTED** |
 
 Microsoft's [properties guidance][properties] permits a standard contract or
 own/default visual EULA, but selecting a contract requires owner approval.
@@ -91,17 +98,20 @@ Do not publish until its host-dependent features have passed the native tests.
 > menus refer to one representative entity, not a new intersection category.
 >
 > Prepare the two grouping fields in your Power BI model and allow custom
-> visuals under your organization's policy. No account or external data
-> service is required by the visual runtime; it requests no additional
-> privileges. This does not change Power BI's own data handling.
+> visuals under your organization's policy. Acquire the visual through
+> existing Atlyn storefront subscriptions. The runtime is ungated for authors
+> and viewers, with free shared viewing and no paid-author identity checks.
+> It requests no additional privileges or licence calls. Power BI's own
+> licensing, permissions and sharing requirements still apply.
 >
 > Synthetic customer/product and feature-adoption examples illustrate the
 > counting rules and data preparation. For setup and support, visit
 > https://www.atlynco.com/docs/faq.
 
-This is the complete proposed functional description, not completed commercial
-terms. Insert owner-approved purchase disclosures if applicable. Do not add
-“certified,” “best in class,” competitor performance claims, unrestricted
+This description records the approved acquisition/runtime model, not new
+commercial terms. Use the owner's existing terms and required publication
+disclosures. Do not add “certified,” “best in class,” competitor performance
+claims, unrestricted
 drill-through/export promises, complete-source counts, or unlimited-data
 claims. See [comparison](comparison.md) for the documented trade-offs.
 
@@ -164,10 +174,12 @@ is not supported; use Desktop **File > Save as** [PBIP FAQ][pbip].
 
 The locally authored project has two bound customer/feature pages, 12 visuals
 and 20 schema-validated definitions, plus the exact final archive and extracted
-resources. That is a useful source artifact, not proof
-that Desktop loaded its model, custom visual resources or queries.
-Current native open/refresh/binding validation and an actual PBIX are
-**PENDING**.
+resources. Source checks alone do not prove native behavior. The coordinator's
+single-variable `4.0.0` to `2.0.0` report-definition correction restored pages,
+refresh and initial customer rendering, with artifact `4.0` and package bytes
+unchanged. A genuine Public-labeled 168,742-byte PBIX was saved. Final
+close/reopen, offline acceptance, both-page semantics and identity/interactions
+remain **PENDING**; see the [qualified native record](validation-results.md#native-report-version-correction-2026-09-10).
 
 Required coordinator handoff:
 
@@ -208,6 +220,10 @@ Replace every `PENDING` value only from actual evidence before submission:
 > received snapshot. Retention/row/display limits and identity-selection
 > refusal are intentional and disclosed. No network/storage privileges or
 > external account/service are required by the visual runtime.
+> Acquisition uses existing Atlyn storefront subscriptions, outside the
+> visual. Authors/viewers are not checked for payment or identity entitlement;
+> shared viewing is free from Atlyn runtime gates. No runtime licensing
+> integration remains pending.
 >
 > Local packaged Chromium tests use host mocks and are not native Power BI
 > evidence. Native Desktop/service/mobile/accessibility/export outcomes:
@@ -235,14 +251,14 @@ snapshot and verify hashes after copying; never overwrite an existing seal.
 | E02 | PBIVIZ filename, bytes, SHA-256, version/GUID/API; inspected manifest/resource metadata; documented build/postprocessing | LOCAL COMPLETE; package hash above and release manifest |
 | E03 | Lockfile and tool/environment inventory, hashes; local type/lint/unit/browser/package/policy/audit logs with command, timestamps and exact totals | LOCAL COMPLETE; 47 unit / 30 browser passes and zero advisories; qualified command logs in seal |
 | E04 | Raw baseline/final performance samples, metric definitions, browser/host-mock environment, fixture hashes and package hashes | LOCAL COMPLETE; developer-tool/native profiles remain separate, unperformed gates |
-| E05 | Original icon/logo sources or generator, authorship/license review, 20×20 and 300×300 PNG dimensions/bytes/SHA-256; optional derivatives separately listed | LOCAL ARTIFACTS COMPLETE; owner source/distribution license still pending |
+| E05 | Original icon/logo sources or generator, authorship/license review, 20×20 and 300×300 PNG dimensions/bytes/SHA-256; optional derivatives separately listed | ORIGINAL ARTIFACTS RETAINED; no first-party license identifier declared; no custom certification-badge asset needed |
 | E06 | Every local host-mock screenshot and capture manifest: package hash, viewport/device scale, dataset/settings, errors/network outcomes; explicit mock classification | LOCAL COMPLETE; 20 PNGs including three labeled preview images; all byte-identical to inspected candidate images |
-| E07 | Both CSVs, authored PBIP/model/PBIR/resources and schema-validation output with schema URLs/versions and content hashes | LOCAL COMPLETE; exact final package/resources and 20 definitions; no native-open claim |
-| E08 | Actual offline PBIX hash, matching embedded visual identity/content, Desktop open/refresh/save/reopen evidence | PENDING native work |
+| E07 | Both CSVs, authored PBIP/model/PBIR/resources and schema-validation output with schema URLs/versions and content hashes | LOCAL COMPLETE; artifact 4.0 / report definition 2.0.0, exact package/resources and 20 definitions; limited native probe recorded separately |
+| E08 | Actual offline PBIX hash, matching embedded visual identity/content, Desktop open/refresh/save/reopen evidence | PROBE PBIX SAVED: 168,742 bytes; final hash/correspondence, reopen/offline and semantic acceptance pending |
 | E09 | Native Desktop/service/mobile/touch/keyboard/screen-reader/performance/export test record, N01–N17 outcomes, host versions, tenant restrictions, defects | PENDING native work |
-| E10 | Native original screenshots + listing derivatives, capture provenance, exact dimensions/bytes/hashes, captions and approval; 1–5 final assets | PENDING native work |
-| E11 | Dependency inventory/notices, approved source/distribution license, EULA/privacy URL/document revisions, support availability/responsiveness, pricing/account approval | PENDING owner approval |
-| E12 | Final listing text, certification notes, source-access plan, reviewer/date/sign-off, later submission/decision references if authorized | PENDING final review |
+| E10 | Native original screenshots + listing derivatives, capture provenance, exact dimensions/bytes/hashes, captions and approval; 1–5 final assets | PENDING parent assets/native work |
+| E11 | Dependency inventory/notices, applicable existing storefront/legal terms, EULA/privacy references, support/account approval | ACQUISITION/RUNTIME APPROVED; publication references remain parent-owned; no new source licence or runtime integration |
+| E12 | Final listing text, certification notes, source-access plan, reviewer/date/sign-off, owner-required **Request Power BI certification** checkbox, later submission/decision references if authorized | PENDING final review/submission; official certification target requested by owner, not granted; Microsoft awards/displays the badge after approval |
 
 Each manifest file entry includes relative path, byte length, SHA-256 and
 evidence class/producer/provenance. File modification time is not mislabeled

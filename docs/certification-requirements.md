@@ -22,8 +22,12 @@ Current requirements must be checked again before an authorized submission.
 The policy page has mixed document/update dates; this register records the
 content retrieved on the research date rather than guessing a newer policy
 version. Policy 1180.1 says visuals are free to acquire and may offer
-additional purchases; that is a platform rule, **not** an owner-approved price
-or licensing commitment for this product.
+additional purchases; that is a platform rule, not a price invented here.
+On 2026-09-10 the owner approved **existing Atlyn storefront subscriptions
+with an ungated renderer and free shared viewing**. Runtime licensing is no
+longer a blocker. The coordinator must present accurate acquisition
+disclosures in the final publishing flow; owner approval is not Microsoft
+approval. See [acquisition and runtime](acquisition-and-runtime.md).
 
 ## Local-only engineering checklist
 
@@ -174,8 +178,11 @@ access must be recorded as a limitation or blocked test, not a passing result.
 Only the coordinator may perform this after the local baseline/final review,
 native validation and owner gates in [release review](release-review.md).
 
-1. Resolve required defects; finalize license/terms/privacy/price, publisher
-   authority, supported behavior, listing assets and offline PBIX.
+1. Resolve required defects; confirm supported behavior and supply applicable
+   existing terms/privacy references, publisher authority, final listing
+   assets and offline PBIX.
+   Acquisition/ungated runtime is already approved; do not add paid-author
+   checks or licensing calls.
 2. Commit and review the exact source and lockfile locally, rebuild using the
    documented command, and seal the package/source/test/media correspondence.
 3. **Only then create or advance the branch named `certification`, all
@@ -187,13 +194,21 @@ native validation and owner gates in [release review](release-review.md).
    dependency repositories. MS1 documents private-repository access details;
    the account owner must handle those through authorized secure channels.
    Never commit passwords, recovery codes, or submission credentials here.
-5. The authorized publisher prepares Partner Center approval and certification
-   request, with source link and test instructions in Notes for certification.
+5. The authorized publisher selects **Request Power BI certification** in
+   Partner Center for the owner's required official certification target,
+   with source link and test instructions in Notes for certification.
    No submission/account creation/access grant is authorized by this document.
 6. Archive Microsoft's actual decision. Show a certification badge/claim only
    after approval. Updates require a fresh review and certification process;
    neither a previous PR merge nor an earlier certified version approves a
    changed package.
+
+The requested target is Microsoft's official **Power BI certified** badge,
+not a granted designation or a custom branding/purchase badge. Microsoft
+awards/displays it after review and approval; no parent-supplied badge asset
+or in-visual image is needed. A documentation-only clarification neither
+requires repackaging/version changes nor authorizes certification-ref/main
+movement, merging or submission.
 
 [certified]: https://learn.microsoft.com/en-us/power-bi/developer/visuals/power-bi-custom-visuals-certified
 [testing]: https://learn.microsoft.com/en-us/power-bi/developer/visuals/submission-testing

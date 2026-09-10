@@ -5,20 +5,25 @@ import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import Ajv from "ajv";
 import { readPackage } from "./read-package.mjs";
-import { authoredPage, fixtures, packageFiles, reportRoot, sampleRoot, sha256, visualGuid } from "./prepare-sample.mjs";
+import { authoredPage, fixtures, packageFiles, reportArtifactVersion, reportDefinitionVersion,
+  reportRoot, sampleRoot, sha256, visualGuid } from "./prepare-sample.mjs";
 
 const readJson = async file => JSON.parse(await readFile(file, "utf8"));
 const cacheRoot = path.join(sampleRoot, ".schema-cache");
 const publicPrefix = "https://developer.microsoft.com/json-schemas/";
 
-export function validateSampleStructure(model, version) {
+export function validateSampleStructure(model, definitionVersion, artifact) {
   assert.match(model, /^model Model\r?$/m, "Required model declaration is missing");
   assert.doesNotMatch(model, /^[ \t]+ref[ \t]+table\b/m, "TMDL ref table declarations must be at document root, not indented");
   const tables = [...model.matchAll(/^ref table (\w+)[ \t]*\r?$/gm)].map(match => match[1]).sort();
   assert.deepEqual(tables, fixtures.map(fixture => fixture.table).sort(), "Required root-level table references are missing or duplicated");
-  assert.ok(version && typeof version === "object", "Required PBIR definition/version.json is missing");
-  assert.equal(version.$schema, `${publicPrefix}fabric/item/report/definition/versionMetadata/1.0.0/schema.json`);
-  assert.equal(version.version, "4.0.0", "Unexpected PBIR definition version");
+  assert.ok(definitionVersion && typeof definitionVersion === "object", "Required report definition/version.json is missing");
+  assert.equal(definitionVersion.$schema, `${publicPrefix}fabric/item/report/definition/versionMetadata/1.0.0/schema.json`);
+  assert.equal(definitionVersion.version, reportDefinitionVersion, "Unexpected report-definition version (definition/version.json)");
+  assert.ok(artifact && typeof artifact === "object", "Required report artifact definition.pbir is missing");
+  assert.equal(artifact.$schema, `${publicPrefix}fabric/item/report/definitionProperties/2.0.0/schema.json`);
+  assert.equal(artifact.version, reportArtifactVersion, "Unexpected report artifact version (definition.pbir)");
+  assert.deepEqual(artifact.datasetReference, { byPath: { path: "../OverlapSample.SemanticModel" } });
 }
 
 async function loadSchema(url, offline, records) {
@@ -174,12 +179,11 @@ export async function validateSample({ embeddedOnly = false, offline = false,
   evidenceDirectory = path.resolve(".tmp", "release-evidence", "final") } = {}) {
   validateSampleStructure(
     await readFile(path.join(sampleRoot, "OverlapSample.SemanticModel", "definition", "model.tmdl"), "utf8"),
-    await readJson(path.join(reportRoot, "definition", "version.json")));
+    await readJson(path.join(reportRoot, "definition", "version.json")),
+    await readJson(path.join(reportRoot, "definition.pbir")));
   const hash = await validatePackage(embeddedOnly);
   await validateModel();
   await validateBindings();
-  const modelReference = await readJson(path.join(reportRoot, "definition.pbir"));
-  assert.deepEqual(modelReference.datasetReference, { byPath: { path: "../OverlapSample.SemanticModel" } });
   const schemaRecords = new Map();
   const ajv = new Ajv({
     allErrors: true, schemaId: "auto", validateSchema: true,
@@ -200,10 +204,11 @@ export async function validateSample({ embeddedOnly = false, offline = false,
   await writeFile(path.join(evidenceRoot, "sample-validation.json"), JSON.stringify({
     validatedAt: new Date().toISOString(), packageSha256: hash, matchesCurrentDist: !embeddedOnly,
     offlineSchemaCheck: offline, definitions: validated, pages: 2, visuals: 12,
+    reportArtifactVersion, reportDefinitionVersion,
     scope: "Local schema, binding, counts and package-byte checks; NOT native Power BI validation",
     schemas: [...schemaRecords.values()].sort((a, b) => a.url.localeCompare(b.url)),
   }, null, 2));
-  console.log(`PASS: ${validated} JSON definitions against Microsoft schemas; 2 pages / 12 authored visuals; query bindings, CSV/TMDL parity, distinct/exact/inclusive/projection counts.`);
+  console.log(`PASS: artifact ${reportArtifactVersion} / report definition ${reportDefinitionVersion}; ${validated} JSON definitions against Microsoft schemas; 2 pages / 12 authored visuals; query bindings, CSV/TMDL parity, distinct/exact/inclusive/projection counts.`);
   console.log(`PASS: unmodified archive + custom visual resources SHA256 ${hash}${embeddedOnly ? " (embedded snapshot only; dist not checked)" : " (matches current dist)"}.`);
   console.log("NOT PROVEN: Desktop TMDL parsing, refresh, rendering, selection identities, native highlighting, save/reopen, or service behavior.");
 }

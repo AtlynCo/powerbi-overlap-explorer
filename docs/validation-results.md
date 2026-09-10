@@ -77,16 +77,43 @@ mutation, but are not a signature, notarization or storage immutability service.
 - Full Microsoft MIT, ISC and embedded Globalize notices are included in the
   distributed JavaScript resource, including emitted minifier notices.
 
+## Native report-version correction, 2026-09-10
+
+The coordinator's single-variable native A/B on the exact provisional sample
+found that report-definition `4.0.0` loaded no report pages/content. Changing
+only `definition/version.json` to `2.0.0`, with artifact `definition.pbir`
+unchanged at `4.0`, restored pages, refresh and initial customer rendering.
+The supplied `overlap-native-version2-probe.json` includes the explorer,
+Atlas/Beacon/Cove, ten entities, native card/table, page 1 of 2 and no dialogs.
+The coordinator saved a Public-labeled 168,742-byte PBIX; this is not a local
+headless conversion or a complete native acceptance result.
+
+The source-only correction independently generates/checks both version
+contracts and prevents the schema-valid but natively failing `4.0.0`
+report-definition regression. The visual remains the same `1.0.0.0` bytes.
+A distinct sample/source receipt records this correction without replacing
+the original rendering seal or earlier provisional sample.
+
 ## Remaining native and owner gates
 
-Desktop/service import, real model identity/filter/highlight behavior,
-screen-reader use, PBIP open/refresh/save, genuine PBIX creation,
-PDF/PowerPoint/image export and tenant-policy behavior remain **unperformed**.
-Schema-valid PBIP and labeled host-mock previews do not close these gates.
+Full both-page semantics, real model identity/filter/highlight behavior,
+screen-reader use, saved PBIX close/reopen and offline acceptance, service
+import, PDF/PowerPoint/image export and tenant-policy behavior remain
+**unverified by the supplied probe**. Schema-valid PBIP, the limited initial
+native result and labeled host-mock previews do not close these gates.
 The coordinator owns these checks and live Marketplace submission.
 
-Source/product licensing, owner-approved public policies, price/licensing
-model, support responsiveness and publication authorization remain owner
-decisions. Nothing has been submitted to Partner Center/AppSource or publicly
-released. See [manual validation](manual-validation.md),
+**Owner update, 2026-09-10:** existing Atlyn storefront subscriptions with
+ungated runtime and free shared viewing are approved. Paid-author identity
+checks and runtime licensing integration are not required or pending. No
+package rebuild/version change accompanies this documentation update.
+The repository declares no first-party license identifier; applicable
+existing terms/public policies, support, native/PBIX work and final assets
+remain in the parent's final publication gate. Official **Power BI certified**
+status is the owner's required target via **Request Power BI certification**
+in Partner Center, not granted approval. Microsoft awards/displays the badge
+after review; no custom badge asset or in-visual graphic is needed. Nothing
+in these local results authorizes submission or release. See
+[acquisition/runtime](acquisition-and-runtime.md),
+[manual validation](manual-validation.md),
 [release review](release-review.md) and [submission dossier](submission-dossier.md).

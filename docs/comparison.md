@@ -38,9 +38,13 @@ For identifying that published npm artifact, the registry reports SHA-1 shasum
 `124beb1b3be7c18a096846ab895f2776f43f6e4b` and integrity
 `sha512-OX4MAYGMfHNaW0hVBjsm339T1ymXnOiubAVb09e+RRZBNkX5Og3wO/ONt3R2Uy+UB1Qstfazg9QrUdWos6VtQQ==`.
 These are registry metadata, not locally computed download hashes. No commercial
-license was purchased or accepted. Atlyn's own source/distribution license,
-product terms, privacy policy, and price remain separate owner decisions;
-the MIT licenses of Microsoft utility dependencies do not license Atlyn's code.
+license was purchased or accepted. Atlyn's owner subsequently approved
+existing storefront subscription acquisition with an ungated renderer and
+free shared viewing, without paid-author identity checks. This is not a new
+source licence: the repository declares no first-party LICENSE/LICENCE file
+or SPDX identifier. Existing terms/publication references remain separate
+from runtime behavior; Microsoft utility MIT licenses do not license Atlyn's
+code. See [the owner decision](acquisition-and-runtime.md).
 
 ## Data contracts and semantics
 
@@ -120,7 +124,7 @@ ready-made equivalent. `Not established` is not evidence of absence.
 | 9 | Attribute distributions | Not implemented | Numeric boxplots; categorical attributes in source | Measures/conditional formatting, not a built-in intersection boxplot | Flexible Vega/Vega-Lite marks |
 | 10 | Arbitrary chart composition | Purpose-built overlap layout | Purpose-built UpSet with broader style options; sibling Venn/Euler integration documented | Native rows/columns/hierarchies | Custom Vega/Vega-Lite composition |
 | 11 | Row/completeness contract | 30,000 processed snapshot rows; explicit segmentation, invalid/drop/omission notices | 30,000-row window declared; completeness/refusal equivalence not established | Query/model-dependent; no competitor scale measurement | Query/specification-dependent; no competitor scale measurement |
-| 12 | Delivery/licensing evidence | Local candidate; no approval; owner legal/price decisions pending | Real Power BI integration and license evidence above; no current Marketplace certification claim | Built into Power BI; Power BI licensing applies | Real Power BI custom visual; chosen version, distribution and specification must be verified |
+| 12 | Delivery/licensing evidence | Owner-approved existing Atlyn storefront subscriptions; ungated runtime/free shared viewing; native/publication gate pending, no first-party SPDX identifier declared | Real Power BI integration and license evidence above; no current Marketplace certification claim | Built into Power BI; Power BI licensing applies | Real Power BI custom visual; chosen version, distribution and specification must be verified |
 
 Sources for matrix: Microsoft [matrix documentation][matrix]. Sources for
 Deneb: publisher [dataset][deneb-data] and [cross-filtering][deneb-selection]

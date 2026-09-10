@@ -1,16 +1,22 @@
 # Licensing and provenance review
 
-## Owner source license: unresolved
+## Current first-party license declaration
 
-The owner has not selected a license for this visual's original source,
-documentation, samples, or artwork. This work does not choose one on the
-owner's behalf. A private npm package flag is not a license, and the presence
-of permissively licensed dependencies does not license this repository.
+Checked **2026-09-10** on the current source and fetched `origin/main`:
+there is **no first-party LICENSE/LICENCE file** and no `license` field in
+`package.json`. **SPDX identifier: not declared. First-party terms text:
+not present in the repository.** Do not label this MIT, proprietary, or
+`UNLICENSED` as though that identifier were declared. The `private: true`
+npm flag and dependency licenses do not supply a first-party license.
 
-Before distribution, obtain an owner-approved decision covering the intended
-source and binary distribution. Any commercial terms, end-user terms,
-support promises, or public privacy statement require separate owner review.
-Nothing here invents those terms or provides legal advice.
+The owner approved acquisition through existing Atlyn subscriptions with
+an **ungated runtime and free shared viewing**, without paid-author identity
+enforcement. That approved operating model does not add or relicense source
+terms. No runtime licensing integration remains to implement.
+
+Use the owner's existing storefront/legal documents for publication terms
+and disclosures; do not invent prices, EULA clauses, support promises or a
+public privacy statement. See [acquisition and runtime](acquisition-and-runtime.md).
 
 ## Original work
 
@@ -49,9 +55,10 @@ transitive software bill of materials. Before release:
 4. Review redistribution of development tools separately if shipping them.
    JSZip offers MIT or GPL-3.0-or-later upstream; identify the relied-upon
    alternative in the release's own review rather than mislabeling its terms.
-5. Resolve the owner's source license and public-policy documentation
-   blockers. Existing Atlyn support/contact metadata is confirmed; checking
-   responsiveness is a release-readiness task, not a missing license choice.
+5. Record the owner's applicable existing terms and public-policy documents
+   for the publication handoff, without inventing a source license or runtime
+   gate. Existing Atlyn support/contact metadata is confirmed; checking
+   responsiveness remains a release-readiness task.
 
 Microsoft, Power BI, and third-party package names identify dependencies or
 platforms; no endorsement, partnership, or certification is asserted.

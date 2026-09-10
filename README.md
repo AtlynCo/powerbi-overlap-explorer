@@ -5,10 +5,14 @@ intersection bars align with connected membership dots; the margin shows each
 retained set's distinct-entity size. Counting and geometry are original
 implementations, not an embedded or copied UpSet library.
 
-**Status:** version `1.0.0.0`, private evaluation source. Not certified and not an
-AppSource listing. The owner has not selected a source license. Licensing,
-required owner-approved public policies, and real Power BI validation remain
-publication blockers; see [release review](docs/release-review.md).
+**Status:** version `1.0.0.0`, private source; not certified or submitted.
+The owner approved **existing Atlyn storefront subscriptions with an ungated
+runtime and free shared viewing**. Runtime licensing is not a blocker and
+there is no paid-author identity enforcement. The repository declares no
+first-party LICENSE file or SPDX identifier. Native validation, final PBIX acceptance,
+final assets and the coordinator's publication gate remain; see
+[acquisition and runtime](docs/acquisition-and-runtime.md) and
+[release review](docs/release-review.md).
 
 ## Quick start
 
@@ -44,8 +48,11 @@ publication blockers; see [release review](docs/release-review.md).
 
 The authored PBIP uses inline synthetic data, bound customer-product and
 feature-adoption pages, and an embedded copy of the exact local package.
-Source/schema validation is not a Desktop-open result: the coordinator must
-open, refresh, inspect interactions, and save a genuine PBIX in Desktop.
+The native version A/B restored pages, refresh and initial customer rendering
+by keeping artifact `4.0` separate from report-definition `2.0.0`. The
+coordinator saved a probe PBIX; final reopen, both-page semantics/interactions
+and host acceptance remain open. Source/schema checks do not replace those
+gates; see the [sample's native record](samples/offline-pbip/README.md#native-report-version-correction-2026-09-10).
 
 ## Data contract and denominator
 
@@ -176,6 +183,15 @@ claim. Real screen-reader and Power BI host checks remain in the
 
 ## Privacy, support, and distribution
 
+Acquisition is handled through existing Atlyn storefront subscriptions,
+outside the visual. The renderer does not verify author/viewer subscriptions
+or require licence keys; shared viewers face no Atlyn runtime payment gate.
+Power BI's own licensing and report permissions still apply. Official
+**Power BI certified** status is the owner's required target, not a granted
+designation. The coordinator uses Partner Center's **Request Power BI
+certification** checkbox when authorized to submit; Microsoft awards/displays
+the badge after review and approval. No custom or in-visual badge is required.
+
 The visual declares no privileges or external scripts. It does not request
 network access, external fonts, telemetry, or local storage; data processing
 stays inside the visual's host-provided session. Normal Power BI service and
@@ -280,6 +296,7 @@ The original [SVG icon](assets/icon.svg) produces the required 20×20 PNG with
 - [Current Microsoft submission requirements](docs/certification-requirements.md)
 - [Draft listing and certification dossier](docs/submission-dossier.md)
 - [License and provenance review](docs/licensing.md)
+- [Owner-approved acquisition and ungated runtime](docs/acquisition-and-runtime.md)
 - [Third-party notices](THIRD-PARTY-NOTICES.md)
 - [Synthetic CSVs and expected results](samples/README.md)
 - [Self-contained offline PBIP sample](samples/offline-pbip/README.md)
