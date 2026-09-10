@@ -1,7 +1,8 @@
 # Authored offline Overlap Explorer report
 
-This is a **fully authored PBIP/PBIR source report**, not a PBIX and not a
-claim of successful opening in Power BI Desktop. Both pages contain a bound
+This is a **fully authored PBIP/PBIR source report**, not a PBIX. The
+coordinator's native version A/B restored pages, refresh and initial rendering;
+full semantic and save/reopen acceptance remains separate. Both pages contain a bound
 Overlap Explorer, a native distinct-entity card, a native segment/cohort bar
 chart, a native membership table, a heading, and an explanatory text box.
 The explorer's actual private visual package is included locally; there is
@@ -95,7 +96,8 @@ keys, source maps, or third-party sample binaries are copied. The separate
 original archive is provenance and a manual import fallback; it is not a
 second resource registration.
 
-From the repository root, **after the final local package build**:
+From the repository root, with the intended package already in `dist`
+(**no PBIVIZ rebuild is needed for this sample-only version correction**):
 
 ```powershell
 node scripts\prepare-sample.mjs
@@ -104,7 +106,7 @@ node scripts\validate-sample.mjs
 
 Preparation requires exactly one `.pbiviz` in `dist` via
 `scripts\read-package.mjs`, verifies its identity/version/capabilities, and
-deterministically updates the authored pages and embedded files. A later
+deterministically updates both version contracts, authored pages and embedded files. A later
 build makes the sample stale: rerun both commands before releasing it.
 Commit/share the generated original archive, extracted resources, manifest,
 and authored definitions together. They are intentionally not ignored.
@@ -130,6 +132,20 @@ exact, inclusive and omitted-set counts, source/extracted bytes and SHA256,
 and (by default) equality with the one current `dist` package.
 It is not a general TMDL parser or a Power BI rendering engine.
 
+### Independent report version contracts
+
+| File | Required value for this sample | Contract |
+| --- | --- | --- |
+| `OverlapSample.Report\definition.pbir` | `"version": "4.0"` | Report artifact / `.pbir` format, with a relative semantic-model reference |
+| `OverlapSample.Report\definition\version.json` | `"version": "2.0.0"` | Enhanced report-definition format used to load pages and visuals |
+
+The generator writes both files, including when they are missing or stale.
+The checker verifies them independently against the supported sample baseline.
+Do not derive the report-definition version from the artifact version or the
+schema URL: those are separate version contracts. Microsoft's version-metadata
+schema accepts any syntactically valid positive major version, including
+`4.0.0`; that alone does not establish Desktop support.
+
 ## Required manual host gate — not yet established by source validation
 
 ### Provisional structural correction, 2026-09-09
@@ -141,11 +157,30 @@ then accepted both tables and their expected columns/source mappings, measure
 definitions and import M partitions. It did **not** execute M or DAX, refresh
 data, open Desktop, or render the report.
 
-`definition/version.json` was already present and declares PBIR 4.0.0.
-The validator now explicitly requires that file/version and root-level table
-references instead of relying solely on enumerating whatever schema files
-exist. Regression cases cover the previously accepted indented-reference and
-missing-version shapes.
+The earlier provisional sample contained report-definition `4.0.0`, and its
+checker incorrectly enforced that value. TOM did not validate this report
+metadata; the separate native correction below supersedes that assumption.
+The prior indented-reference and missing-version regressions remain covered.
+
+### Native report-version correction, 2026-09-10
+
+The coordinator opened a fresh extraction of the exact provisional ZIP.
+Unchanged report-definition `4.0.0` produced no report-page tabs/content.
+Changing **only** `definition\version.json` to `2.0.0`, while leaving
+`definition.pbir` at `4.0`, restored the report pages, model refresh and
+customer/product rendering. The supplied native UIA probe
+`overlap-native-version2-probe.json` records the explorer, Atlas/Beacon/Cove,
+the ten-entity universe, the native card/table and page 1 of 2, with no dialogs.
+The coordinator also saved a genuine, Public-labeled PBIX of 168,742 bytes.
+
+This source correction persists that exact version separation and adds
+generation/validation regressions. It does not rebuild or modify the visual
+package, model, queries, pages or private resources. The distinct corrected
+sample/source receipt preserves exact archive/resource hashes; historical
+bundles remain untouched. The PBIX stays with the coordinator and is not
+manufactured or included in this source sample. Close/reopen, offline
+acceptance, both pages' full semantics/interactions and service/export behavior
+remain coordinator-owned gates, not inferred passes from this initial probe.
 
 This is a **provisional sample-only correction**, using the unchanged
 `1.0.0.0` renderer. The earlier sealed bundle is not rewritten. On 2026-09-10
@@ -167,7 +202,7 @@ npm run validate:sample -- --offline --evidence-dir .tmp\sample-preflight
 
 The explicit evidence directory keeps provisional preflight output separate
 from the original rendering evidence. The coordinator still owns all native UI
-work and genuine PBIX production.
+work and final PBIX acceptance.
 
 Schema-valid PBIR does **not** establish that Desktop will successfully load
 private-visual resources, parse TMDL, refresh, execute semantic queries, or
@@ -196,6 +231,8 @@ evidence that the authored source opened.
 ## Public format references
 
 - [Microsoft PBIP report structure and private CustomVisuals folder](https://learn.microsoft.com/power-bi/developer/projects/projects-report)
+- [Microsoft report artifact / definition.pbir schema](https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json)
+- [Microsoft report-definition version metadata schema](https://developer.microsoft.com/json-schemas/fabric/item/report/definition/versionMetadata/1.0.0/schema.json)
 - [Microsoft PBIR report schema: ResourcePackage and CustomVisualMetadata](https://github.com/microsoft/json-schemas/blob/main/fabric/item/report/definition/report/3.1.0/schema.json)
 - [Microsoft visual container schema](https://github.com/microsoft/json-schemas/blob/main/fabric/item/report/definition/visualContainer/2.5.0/schema.json)
 - [Microsoft query projection schema](https://github.com/microsoft/json-schemas/blob/main/fabric/item/report/definition/visualConfiguration/2.2.0/schema-embedded.json)

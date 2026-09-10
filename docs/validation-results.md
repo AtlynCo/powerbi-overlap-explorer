@@ -77,12 +77,30 @@ mutation, but are not a signature, notarization or storage immutability service.
 - Full Microsoft MIT, ISC and embedded Globalize notices are included in the
   distributed JavaScript resource, including emitted minifier notices.
 
+## Native report-version correction, 2026-09-10
+
+The coordinator's single-variable native A/B on the exact provisional sample
+found that report-definition `4.0.0` loaded no report pages/content. Changing
+only `definition/version.json` to `2.0.0`, with artifact `definition.pbir`
+unchanged at `4.0`, restored pages, refresh and initial customer rendering.
+The supplied `overlap-native-version2-probe.json` includes the explorer,
+Atlas/Beacon/Cove, ten entities, native card/table, page 1 of 2 and no dialogs.
+The coordinator saved a Public-labeled 168,742-byte PBIX; this is not a local
+headless conversion or a complete native acceptance result.
+
+The source-only correction independently generates/checks both version
+contracts and prevents the schema-valid but natively failing `4.0.0`
+report-definition regression. The visual remains the same `1.0.0.0` bytes.
+A distinct sample/source receipt records this correction without replacing
+the original rendering seal or earlier provisional sample.
+
 ## Remaining native and owner gates
 
-Desktop/service import, real model identity/filter/highlight behavior,
-screen-reader use, PBIP open/refresh/save, genuine PBIX creation,
-PDF/PowerPoint/image export and tenant-policy behavior remain **unperformed**.
-Schema-valid PBIP and labeled host-mock previews do not close these gates.
+Full both-page semantics, real model identity/filter/highlight behavior,
+screen-reader use, saved PBIX close/reopen and offline acceptance, service
+import, PDF/PowerPoint/image export and tenant-policy behavior remain
+**unverified by the supplied probe**. Schema-valid PBIP, the limited initial
+native result and labeled host-mock previews do not close these gates.
 The coordinator owns these checks and live Marketplace submission.
 
 **Owner update, 2026-09-10:** existing Atlyn storefront subscriptions with

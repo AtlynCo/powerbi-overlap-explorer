@@ -9,6 +9,9 @@ export const sampleRoot = path.resolve("samples", "offline-pbip");
 export const reportRoot = path.join(sampleRoot, "OverlapSample.Report");
 export const visualGuid = "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42";
 export const schemaRoot = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/";
+// Artifact and report-definition versions are separate Desktop contracts.
+export const reportArtifactVersion = "4.0";
+export const reportDefinitionVersion = "2.0.0";
 export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 export const fixtures = [
   {
@@ -148,13 +151,25 @@ export async function packageFiles(packaged) {
   return Promise.all(names.map(async name => ({ name, bytes: await packaged.zip.file(name).async("nodebuffer") })));
 }
 
-async function write(relative, value) {
-  const destination = path.join(sampleRoot, relative);
+async function write(relative, value, root = sampleRoot) {
+  const destination = path.join(root, relative);
   await mkdir(path.dirname(destination), { recursive: true });
   await writeFile(destination, value);
 }
 
 const json = value => `${JSON.stringify(value, null, 2)}\n`;
+
+export async function prepareReportVersions(destination = reportRoot) {
+  await write("definition.pbir", json({
+    $schema: "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json",
+    version: reportArtifactVersion,
+    datasetReference: { byPath: { path: "../OverlapSample.SemanticModel" } },
+  }), destination);
+  await write(path.join("definition", "version.json"), json({
+    $schema: `${schemaRoot}versionMetadata/1.0.0/schema.json`,
+    version: reportDefinitionVersion,
+  }), destination);
+}
 
 export async function prepareSample() {
   const packaged = await readPackage();
@@ -174,6 +189,7 @@ export async function prepareSample() {
     bytes: packaged.bytes.length, sha256: sha256(packaged.bytes), embeddedFiles,
   }));
   const definition = path.join("OverlapSample.Report", "definition");
+  await prepareReportVersions();
   await write(path.join(definition, "report.json"), json({
     $schema: `${schemaRoot}report/3.1.0/schema.json`,
     themeCollection: {},
@@ -196,7 +212,7 @@ export async function prepareSample() {
       await write(path.join(folder, "visuals", visual.name, "visual.json"), json(visual));
     }
   }
-  console.log(`Prepared 2 bound pages and exact local package SHA256 ${sha256(packaged.bytes)}`);
+  console.log(`Prepared artifact ${reportArtifactVersion} / report definition ${reportDefinitionVersion}, 2 bound pages and exact local package SHA256 ${sha256(packaged.bytes)}`);
   console.log("Run node scripts/validate-sample.mjs. Desktop open/refresh/render remains a manual host gate.");
 }
 

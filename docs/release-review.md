@@ -15,7 +15,9 @@ certification or native-host proof; see [the decision record](acquisition-and-ru
 The original rendering baseline was `4356e10`. The quality/sample work through
 `8026329` was merged by PR #2 into `origin/main` at `b7a5df2`; that historical
 merge does not authorize further main/ref changes, merges or submission.
-This documentation follow-up does not change the renderer or frozen bundles.
+This follow-up also corrects the sample's report-definition version to
+`2.0.0` while preserving artifact `4.0`, based on the coordinator's native A/B.
+It does not change the renderer or frozen bundles.
 The final package SHA-256 is
 `ae2f1c09694fb5cade37bd1bbe30c18d212e8920f7f9a9cadd33a0234f9cebf0`.
 The release seal records the final full source commit and archive/file hashes.
@@ -69,10 +71,10 @@ failure. Do not close a native or owner gate with an automated local check.
 | B03 | Publisher authority and public support; blocks submission | Publisher owner | Authorized account/legal entity; working public support and responsive contact; secure reviewer-access plan | **PENDING**; metadata verified, responsiveness/account authority not established |
 | B04 | Final local correctness and failure-state proof | Engineering coordinator | Final revision-linked type/lint/unit/package/Chromium host-mock logs, all intentional limits and adversarial/selection/lifecycle cases | **LOCAL PASS**: 47 unit / 30 packaged-browser cases; source-linked release seal |
 | B05 | Certification build/repository/audit compliance | Engineering coordinator | Current latest API/tools review; required commands/files/plugin config; no moderate/high audit warnings; safe source/bundle; exact rebuild/package correspondence | **LOCAL PASS**: explicit `eslint`, current reviewed SDK/tools, documented custom package path, zero audit vulnerabilities; Microsoft approval not implied |
-| B06 | Native Desktop/service/core host behavior | Native validation coordinator | Actual N01–N13/N15 results in [certification instructions](certification-requirements.md), real identities/model/filtering/persistence, profiles and defects resolved | **NOT RUN in this dossier** |
+| B06 | Native Desktop/service/core host behavior | Native validation coordinator | Actual N01–N13/N15 results in [certification instructions](certification-requirements.md), real identities/model/filtering/persistence, profiles and defects resolved | **INITIAL NATIVE PROBE ONLY**; version correction restored pages/refresh/customer rendering; full semantics and host matrix pending |
 | B07 | Mobile/touch/accessibility/export coverage | Native validation coordinator | N14/N16 outcomes on applicable supported hosts; tenant/certification restrictions honestly recorded; no false conformance/export claim | **NOT RUN** |
-| B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PASS / NATIVE PENDING**: 20 definitions, two bound pages, exact embedded archive/resources; native acceptance remains open |
-| B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **BLOCKED: no verified native PBIX** |
+| B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PASS / INITIAL NATIVE OPEN**: 20 definitions, two bound pages, exact embedded bytes; full both-page acceptance pending |
+| B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **PROBE PBIX SAVED: 168,742 bytes**; final hash/correspondence, offline reopen and semantic acceptance remain parent-owned |
 | B10 | Listing icon/logo/screenshots | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review | **LOCAL ASSETS COMPLETE / NATIVE SCREENSHOTS PENDING**; local previews are host-mock labeled; no custom certification-badge asset is required |
 | B11 | Source/package/evidence integrity | Engineering coordinator | Immutable [dossier manifest](submission-dossier.md#immutable-evidence-manifest), final source/archive/package/input/media hashes and qualified evidence classes | Recorded by the clean-commit, write-once release seal; final location/hash accompanies the PR handoff |
 | B12 | Listing and certification handoff | Product/publisher + coordinator | Approved accurate listing/notes, resolved required gates, lowercase `certification` branch matching frozen package/source; explicit instruction to submit | **BLOCKED pending prior gates and owner authorization** |

@@ -9,7 +9,7 @@ implementations, not an embedded or copied UpSet library.
 The owner approved **existing Atlyn storefront subscriptions with an ungated
 runtime and free shared viewing**. Runtime licensing is not a blocker and
 there is no paid-author identity enforcement. The repository declares no
-first-party LICENSE file or SPDX identifier. Native validation, a genuine PBIX,
+first-party LICENSE file or SPDX identifier. Native validation, final PBIX acceptance,
 final assets and the coordinator's publication gate remain; see
 [acquisition and runtime](docs/acquisition-and-runtime.md) and
 [release review](docs/release-review.md).
@@ -48,8 +48,11 @@ final assets and the coordinator's publication gate remain; see
 
 The authored PBIP uses inline synthetic data, bound customer-product and
 feature-adoption pages, and an embedded copy of the exact local package.
-Source/schema validation is not a Desktop-open result: the coordinator must
-open, refresh, inspect interactions, and save a genuine PBIX in Desktop.
+The native version A/B restored pages, refresh and initial customer rendering
+by keeping artifact `4.0` separate from report-definition `2.0.0`. The
+coordinator saved a probe PBIX; final reopen, both-page semantics/interactions
+and host acceptance remain open. Source/schema checks do not replace those
+gates; see the [sample's native record](samples/offline-pbip/README.md#native-report-version-correction-2026-09-10).
 
 ## Data contract and denominator
 

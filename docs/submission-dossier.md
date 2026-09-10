@@ -12,10 +12,11 @@ The current release branch is **`release-quality-overlap`**. The coordinator's
 records 47 unit / 30 packaged-browser passes, exact authored sample/resource
 checks, inspected images and regenerated measurements. The original
 clean-source rendering seal records its tested commit, package/assets/evidence
-and hashes; the current documentation update does not rewrite that seal.
+and hashes; the source-only sample/version correction does not rewrite that seal.
 Runtime licensing integration is not pending. The current renderer is
 intended, with no repackage/version change for this documentation update.
-Native work, genuine PBIX conversion and final assets remain parent-owned.
+The native version A/B restored pages/refresh/initial rendering and produced
+a probe PBIX. Final native/PBIX acceptance and assets remain parent-owned.
 
 ## Confirmed identity and unresolved business fields
 
@@ -173,10 +174,12 @@ is not supported; use Desktop **File > Save as** [PBIP FAQ][pbip].
 
 The locally authored project has two bound customer/feature pages, 12 visuals
 and 20 schema-validated definitions, plus the exact final archive and extracted
-resources. That is a useful source artifact, not proof
-that Desktop loaded its model, custom visual resources or queries.
-Current native open/refresh/binding validation and an actual PBIX are
-**PENDING**.
+resources. Source checks alone do not prove native behavior. The coordinator's
+single-variable `4.0.0` to `2.0.0` report-definition correction restored pages,
+refresh and initial customer rendering, with artifact `4.0` and package bytes
+unchanged. A genuine Public-labeled 168,742-byte PBIX was saved. Final
+close/reopen, offline acceptance, both-page semantics and identity/interactions
+remain **PENDING**; see the [qualified native record](validation-results.md#native-report-version-correction-2026-09-10).
 
 Required coordinator handoff:
 
@@ -250,8 +253,8 @@ snapshot and verify hashes after copying; never overwrite an existing seal.
 | E04 | Raw baseline/final performance samples, metric definitions, browser/host-mock environment, fixture hashes and package hashes | LOCAL COMPLETE; developer-tool/native profiles remain separate, unperformed gates |
 | E05 | Original icon/logo sources or generator, authorship/license review, 20×20 and 300×300 PNG dimensions/bytes/SHA-256; optional derivatives separately listed | ORIGINAL ARTIFACTS RETAINED; no first-party license identifier declared; no custom certification-badge asset needed |
 | E06 | Every local host-mock screenshot and capture manifest: package hash, viewport/device scale, dataset/settings, errors/network outcomes; explicit mock classification | LOCAL COMPLETE; 20 PNGs including three labeled preview images; all byte-identical to inspected candidate images |
-| E07 | Both CSVs, authored PBIP/model/PBIR/resources and schema-validation output with schema URLs/versions and content hashes | LOCAL COMPLETE; exact final package/resources and 20 definitions; no native-open claim |
-| E08 | Actual offline PBIX hash, matching embedded visual identity/content, Desktop open/refresh/save/reopen evidence | PENDING native work |
+| E07 | Both CSVs, authored PBIP/model/PBIR/resources and schema-validation output with schema URLs/versions and content hashes | LOCAL COMPLETE; artifact 4.0 / report definition 2.0.0, exact package/resources and 20 definitions; limited native probe recorded separately |
+| E08 | Actual offline PBIX hash, matching embedded visual identity/content, Desktop open/refresh/save/reopen evidence | PROBE PBIX SAVED: 168,742 bytes; final hash/correspondence, reopen/offline and semantic acceptance pending |
 | E09 | Native Desktop/service/mobile/touch/keyboard/screen-reader/performance/export test record, N01–N17 outcomes, host versions, tenant restrictions, defects | PENDING native work |
 | E10 | Native original screenshots + listing derivatives, capture provenance, exact dimensions/bytes/hashes, captions and approval; 1–5 final assets | PENDING parent assets/native work |
 | E11 | Dependency inventory/notices, applicable existing storefront/legal terms, EULA/privacy references, support/account approval | ACQUISITION/RUNTIME APPROVED; publication references remain parent-owned; no new source licence or runtime integration |
