@@ -34,7 +34,7 @@ Native work, genuine PBIX conversion and final assets remain parent-owned.
 | Acquisition model | **APPROVED:** existing Atlyn storefront subscriptions, outside the visual |
 | Runtime / shared viewing | **APPROVED:** ungated authors/viewers, free shared viewing, no paid-author identity verification or licence calls |
 | Prices / contract details / availability markets | Use owner-supplied existing terms; no amounts, tiers, SLA or refund clauses invented |
-| Certification request | **NOT SUBMITTED**; optional process, not an existing designation |
+| Certification target | **OWNER REQUIRED:** official **Power BI certified** designation via Partner Center's **Request Power BI certification** checkbox; **NOT SUBMITTED / NOT GRANTED** |
 
 Microsoft's [properties guidance][properties] permits a standard contract or
 own/default visual EULA, but selecting a contract requires owner approval.
@@ -123,7 +123,6 @@ Requirements checked against Microsoft [publication][publish],
 | --- | --- | --- |
 | Visual-pane icon | PNG, exactly **20×20** pixels, referenced by `pbiviz.json` | Original `assets/icon.png`, inspected and package-byte/dimension checked; hash in release seal |
 | Marketplace logo | PNG, exactly **300×300** pixels; sharp and recognizable | Original `assets/logo-300.png`, inspected; dimensions/hash in release seal |
-| Extra PowerBI badge | **Explicit owner requirement**; use the coordinator's approved asset and placement | **ASSET/PLACEMENT TO FOLLOW**; not a Microsoft certification badge |
 | Additional 50/150px images | May be useful derivative assets; not mandatory sizes in the current cited Power BI listing instructions | Optional; do not substitute for 300×300 |
 | Screenshots | **At least 1, at most 5**; PNG; each exactly **1366×768** pixels; each **≤1024 KB** | Native captures **PENDING** |
 | Screenshot composition | Clear legible text, correct aspect ratio; no personal data/unrelated UI; useful nonobscuring callouts | Local preview inspection complete; native listing composition/approval **PENDING** |
@@ -249,14 +248,14 @@ snapshot and verify hashes after copying; never overwrite an existing seal.
 | E02 | PBIVIZ filename, bytes, SHA-256, version/GUID/API; inspected manifest/resource metadata; documented build/postprocessing | LOCAL COMPLETE; package hash above and release manifest |
 | E03 | Lockfile and tool/environment inventory, hashes; local type/lint/unit/browser/package/policy/audit logs with command, timestamps and exact totals | LOCAL COMPLETE; 47 unit / 30 browser passes and zero advisories; qualified command logs in seal |
 | E04 | Raw baseline/final performance samples, metric definitions, browser/host-mock environment, fixture hashes and package hashes | LOCAL COMPLETE; developer-tool/native profiles remain separate, unperformed gates |
-| E05 | Original icon/logo sources or generator, authorship/license review, 20×20 and 300×300 PNG dimensions/bytes/SHA-256; optional derivatives and required Extra PowerBI badge separately identified | ORIGINAL ARTIFACTS RETAINED; badge asset/placement to follow; no first-party license identifier declared |
+| E05 | Original icon/logo sources or generator, authorship/license review, 20×20 and 300×300 PNG dimensions/bytes/SHA-256; optional derivatives separately listed | ORIGINAL ARTIFACTS RETAINED; no first-party license identifier declared; no custom certification-badge asset needed |
 | E06 | Every local host-mock screenshot and capture manifest: package hash, viewport/device scale, dataset/settings, errors/network outcomes; explicit mock classification | LOCAL COMPLETE; 20 PNGs including three labeled preview images; all byte-identical to inspected candidate images |
 | E07 | Both CSVs, authored PBIP/model/PBIR/resources and schema-validation output with schema URLs/versions and content hashes | LOCAL COMPLETE; exact final package/resources and 20 definitions; no native-open claim |
 | E08 | Actual offline PBIX hash, matching embedded visual identity/content, Desktop open/refresh/save/reopen evidence | PENDING native work |
 | E09 | Native Desktop/service/mobile/touch/keyboard/screen-reader/performance/export test record, N01–N17 outcomes, host versions, tenant restrictions, defects | PENDING native work |
-| E10 | Native original screenshots + listing derivatives, capture provenance, exact dimensions/bytes/hashes, captions and approval; 1–5 final assets; required Extra PowerBI badge separately identified | PENDING parent assets/native work |
+| E10 | Native original screenshots + listing derivatives, capture provenance, exact dimensions/bytes/hashes, captions and approval; 1–5 final assets | PENDING parent assets/native work |
 | E11 | Dependency inventory/notices, applicable existing storefront/legal terms, EULA/privacy references, support/account approval | ACQUISITION/RUNTIME APPROVED; publication references remain parent-owned; no new source licence or runtime integration |
-| E12 | Final listing text, certification notes, source-access plan, reviewer/date/sign-off, later submission/decision references if authorized | PENDING final review |
+| E12 | Final listing text, certification notes, source-access plan, reviewer/date/sign-off, owner-required **Request Power BI certification** checkbox, later submission/decision references if authorized | PENDING final review/submission; official certification target requested by owner, not granted; Microsoft awards/displays the badge after approval |
 
 Each manifest file entry includes relative path, byte length, SHA-256 and
 evidence class/producer/provenance. File modification time is not mislabeled

@@ -183,8 +183,11 @@ claim. Real screen-reader and Power BI host checks remain in the
 Acquisition is handled through existing Atlyn storefront subscriptions,
 outside the visual. The renderer does not verify author/viewer subscriptions
 or require licence keys; shared viewers face no Atlyn runtime payment gate.
-Power BI's own licensing and report permissions still apply. The owner-required
-**Extra PowerBI** badge awaits the coordinator's approved asset and placement.
+Power BI's own licensing and report permissions still apply. Official
+**Power BI certified** status is the owner's required target, not a granted
+designation. The coordinator uses Partner Center's **Request Power BI
+certification** checkbox when authorized to submit; Microsoft awards/displays
+the badge after review and approval. No custom or in-visual badge is required.
 
 The visual declares no privileges or external scripts. It does not request
 network access, external fonts, telemetry, or local storage; data processing

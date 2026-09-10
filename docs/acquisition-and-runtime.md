@@ -20,12 +20,17 @@ gates, WebAccess, or external runtime licence calls. There is no pending
 runtime-licensing implementation and no requirement to repackage or bump the
 version solely to record this decision.
 
-## Required badge and publication boundary
+## Required certification target and publication boundary
 
-The owner explicitly requires an **Extra PowerBI** badge. The coordinator
-will supply the approved asset and placement; do not invent either. This
-requirement is separate from a Microsoft certification badge and does not
-permit a certification claim before Microsoft approval.
+The owner requires Microsoft's official **Power BI certified** designation,
+requested through Partner Center's **Request Power BI certification** checkbox.
+This is the requested target, **not granted certification**. The coordinator
+handles the request when submission is authorized; Microsoft awards/displays
+the badge only after review and approval.
+
+No custom branding asset, purchase badge, or in-visual graphic is requested.
+No parent-supplied badge artwork or placement is required before submission.
+Do not add a badge image or claim certification before Microsoft's decision.
 
 The coordinator owns native validation, genuine PBIX conversion, final assets,
 publication paperwork and the final gate. Hold main, merges, the

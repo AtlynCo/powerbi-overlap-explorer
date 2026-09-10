@@ -73,10 +73,10 @@ failure. Do not close a native or owner gate with an automated local check.
 | B07 | Mobile/touch/accessibility/export coverage | Native validation coordinator | N14/N16 outcomes on applicable supported hosts; tenant/certification restrictions honestly recorded; no false conformance/export claim | **NOT RUN** |
 | B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PASS / NATIVE PENDING**: 20 definitions, two bound pages, exact embedded archive/resources; native acceptance remains open |
 | B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **BLOCKED: no verified native PBIX** |
-| B10 | Listing icon/logo/screenshots and Extra PowerBI badge | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review; owner-required Extra PowerBI badge with approved asset/placement | **PARENT ASSETS PENDING**; local previews are host-mock labeled; do not substitute a Microsoft certification badge |
+| B10 | Listing icon/logo/screenshots | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review | **LOCAL ASSETS COMPLETE / NATIVE SCREENSHOTS PENDING**; local previews are host-mock labeled; no custom certification-badge asset is required |
 | B11 | Source/package/evidence integrity | Engineering coordinator | Immutable [dossier manifest](submission-dossier.md#immutable-evidence-manifest), final source/archive/package/input/media hashes and qualified evidence classes | Recorded by the clean-commit, write-once release seal; final location/hash accompanies the PR handoff |
 | B12 | Listing and certification handoff | Product/publisher + coordinator | Approved accurate listing/notes, resolved required gates, lowercase `certification` branch matching frozen package/source; explicit instruction to submit | **BLOCKED pending prior gates and owner authorization** |
-| B13 | Certification claims/badge | Microsoft + publisher | Actual approval for this version, retained decision | **NOT SUBMITTED / NOT CERTIFIED** |
+| B13 | Official Power BI certification, owner-required target | Microsoft + publisher | Authorized publisher selects **Request Power BI certification** at submission; Microsoft awards/displays the official badge after review/approval; retain the actual decision for this version | **REQUESTED BY OWNER; NOT SUBMITTED / NOT CERTIFIED** |
 
 Microsoft requirements and citations are maintained in
 [certification requirements](certification-requirements.md).
@@ -146,6 +146,7 @@ competitor counts/performance, or a “best in class” result.
    source access. This dossier prepares that handoff; it does not submit,
    grant access, accept contracts or publish.
 
-No Microsoft certification approval or certification badge may be shown
-before the actual Microsoft decision. The required Extra PowerBI badge is
-separate and must use the coordinator's forthcoming approved asset/placement.
+The owner requires the official **Power BI certified** target, requested
+through Partner Center's **Request Power BI certification** checkbox. It has
+not been granted. Microsoft awards/displays the badge only after approval;
+no custom artwork, purchase badge or in-visual graphic is required.

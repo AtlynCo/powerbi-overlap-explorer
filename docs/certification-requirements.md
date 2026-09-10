@@ -180,7 +180,7 @@ native validation and owner gates in [release review](release-review.md).
 
 1. Resolve required defects; confirm supported behavior and supply applicable
    existing terms/privacy references, publisher authority, final listing
-   assets (including the required Extra PowerBI badge) and offline PBIX.
+   assets and offline PBIX.
    Acquisition/ungated runtime is already approved; do not add paid-author
    checks or licensing calls.
 2. Commit and review the exact source and lockfile locally, rebuild using the
@@ -194,17 +194,19 @@ native validation and owner gates in [release review](release-review.md).
    dependency repositories. MS1 documents private-repository access details;
    the account owner must handle those through authorized secure channels.
    Never commit passwords, recovery codes, or submission credentials here.
-5. The authorized publisher prepares Partner Center approval and certification
-   request, with source link and test instructions in Notes for certification.
+5. The authorized publisher selects **Request Power BI certification** in
+   Partner Center for the owner's required official certification target,
+   with source link and test instructions in Notes for certification.
    No submission/account creation/access grant is authorized by this document.
 6. Archive Microsoft's actual decision. Show a certification badge/claim only
    after approval. Updates require a fresh review and certification process;
    neither a previous PR merge nor an earlier certified version approves a
    changed package.
 
-The owner-required **Extra PowerBI** badge is a separate asset requirement,
-not a Microsoft certification badge. Its approved artwork/placement will
-come from the coordinator. A documentation-only approval update neither
+The requested target is Microsoft's official **Power BI certified** badge,
+not a granted designation or a custom branding/purchase badge. Microsoft
+awards/displays it after review and approval; no parent-supplied badge asset
+or in-visual image is needed. A documentation-only clarification neither
 requires repackaging/version changes nor authorizes certification-ref/main
 movement, merging or submission.
 
