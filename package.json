@@ -21,7 +21,8 @@
     "audit": "npm audit --audit-level=moderate",
     "certification": "pwsh -NoProfile -File scripts/package.ps1 -AllLocales -CertificationAudit && node scripts/embed-notices.mjs && node scripts/validate-package.mjs",
     "check": "npm run typecheck && npm run eslint && npm test && npm run certification && npm run test:browser && npm run check:local-policy",
-    "check:release": "npm run assets && npm run check && npm run prepare:sample && npm run validate:sample && npm run test:layouts && npm run benchmark && npm run audit"
+    "check:release": "npm run assets && npm run check && npm run prepare:sample && npm run validate:sample && npm run test:layouts && npm run benchmark && npm run audit",
+    "postinstall": "node scripts/patch-loader.mjs"
   },
   "dependencies": {
     "powerbi-visuals-utils-formattingmodel": "7.1.0",
