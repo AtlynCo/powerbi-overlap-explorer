@@ -2,6 +2,10 @@ param([switch]$CertificationAudit, [switch]$AllLocales)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
+$distFolder = Join-Path $root 'dist'
+if (Test-Path -LiteralPath $distFolder) {
+    Get-ChildItem -LiteralPath $distFolder -Filter '*.pbiviz' | Remove-Item -Force
+}
 $toolHome = Join-Path $root '.tmp\package-home'
 $certFolder = Join-Path $toolHome 'pbiviz-certs'
 $null = New-Item -ItemType Directory -Force -Path $certFolder

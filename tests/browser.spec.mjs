@@ -47,7 +47,7 @@ async function mount(page, settings = {}) {
         return selected;
       },
       async clear() { selected = []; calls.clear++; callback([]); },
-      async showContextMenu(id, point) { calls.context.push({ key: id.getKey(), point }); }
+      async showContextMenu(id, point) { calls.context.push({ key: typeof id?.getKey === "function" ? id.getKey() : undefined, id, point }); }
     };
     const locale = settings.locale || "en-US";
     const host = {
@@ -293,4 +293,15 @@ test("row limit and unknown unloaded totals are visible", async ({ page }) => {
   await expect(page.locator(".summary")).toContainText("Unloaded rows: unknown");
   await expect(page.getByRole("button", { name: "Load more rows" })).toHaveCount(0);
   await expect(page.locator(".completeness")).toContainText("PARTIAL");
+});
+
+test("right-clicking header, footer or background opens context menu with empty identity (Policy 1180.2.5)", async ({ page }) => {
+  await mount(page);
+  await update(page, rows);
+  await page.locator("header").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+  await page.locator(".combination-caption").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+  await page.locator(".atlyn-overlap").click({ button: "right", position: { x: 5, y: 5 } });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
 });

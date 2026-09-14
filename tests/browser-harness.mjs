@@ -51,7 +51,7 @@ export async function mount(page, settings = {}, packageData) {
           if (delay) await new Promise(resolve => setTimeout(resolve, delay));
           selected = []; calls.clear++; callback([]);
         },
-        async showContextMenu(id, point) { calls.context.push({ key: id.getKey(), point }); }
+        async showContextMenu(id, point) { calls.context.push({ key: typeof id?.getKey === "function" ? id.getKey() : undefined, id, point }); }
       };
       const locale = instanceSettings.locale || "en-US";
       const host = {

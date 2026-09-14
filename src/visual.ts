@@ -16,6 +16,7 @@ function isNativeId(id: powerbi.extensibility.ISelectionId): id is NativeId {
 
 export class Visual implements powerbi.extensibility.visual.IVisual {
   private readonly root = element("section", "atlyn-overlap");
+  private readonly element: HTMLElement;
   private readonly host: powerbi.extensibility.visual.IVisualHost;
   private readonly manager: powerbi.extensibility.ISelectionManager;
   private readonly formatting: FormattingSettingsService;
@@ -49,6 +50,7 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
 
   constructor(options?: powerbi.extensibility.visual.VisualConstructorOptions) {
     if (!options) throw new Error("Atlyn Overlap Explorer requires visual constructor options.");
+    this.element = options.element;
     this.host = options.host;
     this.manager = this.host.createSelectionManager();
     this.t = localizer(this.host);
@@ -56,7 +58,7 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     this.number = new Intl.NumberFormat(this.host.locale);
     this.percent = new Intl.NumberFormat(this.host.locale, { style: "percent", maximumFractionDigits: 1 });
     this.root.dir = /^(ar|fa|he|ur)(-|$)/i.test(this.host.locale) ? "rtl" : "ltr";
-    options.element.appendChild(this.root);
+    this.element.appendChild(this.root);
     this.manager.registerOnSelectCallback(ids => {
       if (this.destroyed) return;
       this.selected = ids.filter(isNativeId);
@@ -64,6 +66,39 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     });
     this.root.addEventListener("keydown", event => {
       if (event.key === "Escape") { event.preventDefault(); this.clear(); }
+    });
+    this.element.addEventListener("contextmenu", (event: MouseEvent) => {
+      if (event.defaultPrevented) return;
+      event.preventDefault();
+      if (!this.interactionsAllowed()) return;
+      const revision = this.revision;
+      Promise.resolve().then(() => {
+        if (!this.destroyed && revision === this.revision) {
+          return this.manager.showContextMenu({}, { x: event.clientX, y: event.clientY });
+        }
+        return undefined;
+      }).then(undefined, () => {
+        if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
+      });
+    });
+    this.element.addEventListener("keydown", (event: KeyboardEvent) => {
+      if (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
+        if (event.defaultPrevented) return;
+        event.preventDefault();
+        if (!this.interactionsAllowed()) return;
+        const bounds = (event.target instanceof HTMLElement ? event.target : this.element).getBoundingClientRect();
+        const x = bounds.left + bounds.width / 2;
+        const y = bounds.top + bounds.height / 2;
+        const revision = this.revision;
+        Promise.resolve().then(() => {
+          if (!this.destroyed && revision === this.revision) {
+            return this.manager.showContextMenu({}, { x, y });
+          }
+          return undefined;
+        }).then(undefined, () => {
+          if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
+        });
+      }
     });
   }
 
@@ -279,10 +314,15 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
         if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
       });
     };
-    target.addEventListener("contextmenu", event => { event.preventDefault(); open(event.clientX, event.clientY); });
+    target.addEventListener("contextmenu", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      open(event.clientX, event.clientY);
+    });
     target.addEventListener("keydown", event => {
       if (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
         event.preventDefault();
+        event.stopPropagation();
         const bounds = target.getBoundingClientRect();
         open(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
       }
