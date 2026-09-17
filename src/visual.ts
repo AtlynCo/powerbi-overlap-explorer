@@ -67,39 +67,45 @@ export class Visual implements powerbi.extensibility.visual.IVisual {
     this.root.addEventListener("keydown", event => {
       if (event.key === "Escape") { event.preventDefault(); this.clear(); }
     });
-    this.element.addEventListener("contextmenu", (event: MouseEvent) => {
-      if (event.defaultPrevented) return;
+    this.element.addEventListener("contextmenu", event => this.handleRootContextMenu(event));
+    this.root.addEventListener("contextmenu", event => this.handleRootContextMenu(event));
+    this.element.addEventListener("keydown", event => this.handleRootKeyDown(event));
+    this.root.addEventListener("keydown", event => this.handleRootKeyDown(event));
+  }
+
+  private handleRootContextMenu(event: MouseEvent): void {
+    if (this.destroyed || event.defaultPrevented) return;
+    event.preventDefault();
+    if (!this.interactionsAllowed()) return;
+    const revision = this.revision;
+    Promise.resolve().then(() => {
+      if (!this.destroyed && revision === this.revision) {
+        return this.manager.showContextMenu({}, { x: event.clientX, y: event.clientY });
+      }
+      return undefined;
+    }).then(undefined, () => {
+      if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
+    });
+  }
+
+  private handleRootKeyDown(event: KeyboardEvent): void {
+    if (this.destroyed || event.defaultPrevented) return;
+    if (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
       event.preventDefault();
       if (!this.interactionsAllowed()) return;
+      const bounds = (event.target instanceof HTMLElement ? event.target : this.element).getBoundingClientRect();
+      const x = bounds.left + bounds.width / 2;
+      const y = bounds.top + bounds.height / 2;
       const revision = this.revision;
       Promise.resolve().then(() => {
         if (!this.destroyed && revision === this.revision) {
-          return this.manager.showContextMenu({}, { x: event.clientX, y: event.clientY });
+          return this.manager.showContextMenu({}, { x, y });
         }
         return undefined;
       }).then(undefined, () => {
         if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
       });
-    });
-    this.element.addEventListener("keydown", (event: KeyboardEvent) => {
-      if (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
-        if (event.defaultPrevented) return;
-        event.preventDefault();
-        if (!this.interactionsAllowed()) return;
-        const bounds = (event.target instanceof HTMLElement ? event.target : this.element).getBoundingClientRect();
-        const x = bounds.left + bounds.width / 2;
-        const y = bounds.top + bounds.height / 2;
-        const revision = this.revision;
-        Promise.resolve().then(() => {
-          if (!this.destroyed && revision === this.revision) {
-            return this.manager.showContextMenu({}, { x, y });
-          }
-          return undefined;
-        }).then(undefined, () => {
-          if (!this.destroyed && revision === this.revision) this.notify("SelectionFailed");
-        });
-      }
-    });
+    }
   }
 
   public update(options: Update): void {

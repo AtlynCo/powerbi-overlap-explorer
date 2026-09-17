@@ -63,7 +63,7 @@ export function renderLayout(root: HTMLElement, analysis: Analysis, parsed: Pars
   root.replaceChildren();
   const layout: Layout = {
     status: element("p", "interaction-status"), detail: element("section", "details"),
-    caption: element("p", "combination-caption"), bars: [], sets: []
+    caption: element("footer", "combination-caption"), bars: [], sets: []
   };
   layout.status.setAttribute("role", "status");
   layout.status.setAttribute("aria-live", "polite");

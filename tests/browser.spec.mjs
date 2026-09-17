@@ -300,7 +300,7 @@ test("right-clicking header, footer or background opens context menu with empty 
   await update(page, rows);
   await page.locator("header").click({ button: "right" });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
-  await page.locator(".combination-caption").click({ button: "right" });
+  await page.locator("footer").click({ button: "right" });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
   await page.locator(".atlyn-overlap").click({ button: "right", position: { x: 5, y: 5 } });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });

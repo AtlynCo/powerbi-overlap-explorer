@@ -1,6 +1,6 @@
 {
   "name": "atlyn-overlap-explorer",
-  "version": "1.0.1.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Bounded entity-level intersection exploration for Power BI",
   "scripts": {
