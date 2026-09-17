@@ -7,7 +7,9 @@ import { readPackage } from "./read-package.mjs";
 
 export const sampleRoot = path.resolve("samples", "offline-pbip");
 export const reportRoot = path.join(sampleRoot, "OverlapSample.Report");
-export const visualGuid = "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42";
+const visualConfig = JSON.parse(await readFile("pbiviz.json", "utf8"));
+export const visualGuid = visualConfig.visual.guid;
+export const visualVersion = visualConfig.visual.version;
 export const schemaRoot = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/";
 // Artifact and report-definition versions are separate Desktop contracts.
 export const reportArtifactVersion = "4.0";
@@ -137,9 +139,9 @@ export async function packageFiles(packaged) {
   assert.equal(packaged.metadata.visual.guid, visualGuid);
   assert.equal(packaged.resource.visual.guid, visualGuid);
   assert.equal(packaged.resource.apiVersion, "5.11.0");
-  assert.equal(packaged.metadata.version, "1.0.0.0");
-  assert.equal(packaged.metadata.visual.version, "1.0.0.0");
-  assert.equal(packaged.resource.visual.version, "1.0.0.0");
+  assert.equal(packaged.metadata.version, visualVersion);
+  assert.equal(packaged.metadata.visual.version, visualVersion);
+  assert.equal(packaged.resource.visual.version, visualVersion);
   const project = JSON.parse(await readFile("package.json", "utf8"));
   assert.equal(project.devDependencies["powerbi-visuals-api"], "5.11.1");
   const resourcePath = `resources/${visualGuid}.pbiviz.json`;

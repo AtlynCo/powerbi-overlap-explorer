@@ -1,23 +1,23 @@
 {
   "formatVersion": 1,
   "visualGuid": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42",
-  "visualVersion": "1.0.0.0",
+  "visualVersion": "1.0.1.0",
   "apiVersion": "5.11.0",
   "sdkVersion": "5.11.1",
-  "sourcePackage": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.1.0.0.0.pbiviz",
+  "sourcePackage": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.1.0.1.0.pbiviz",
   "archive": "package/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.pbiviz",
-  "bytes": 135773,
-  "sha256": "ae2f1c09694fb5cade37bd1bbe30c18d212e8920f7f9a9cadd33a0234f9cebf0",
+  "bytes": 131379,
+  "sha256": "9516b83bb9b9d829091ba1a18f51ac7b499ac6101de843ca2c07e0ad83aa6599",
   "embeddedFiles": [
     {
       "path": "OverlapSample.Report/CustomVisuals/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42/package.json",
       "bytes": 748,
-      "sha256": "9837a5665fcf923061d616246183a847c681c3093cf9ce128b318da63fb72ab6"
+      "sha256": "ddbfba99fa456aba8d8f100c4fe86fb5150bcf724ae30dee8e782b6ea16a695c"
     },
     {
       "path": "OverlapSample.Report/CustomVisuals/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42/resources/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.pbiviz.json",
-      "bytes": 827122,
-      "sha256": "dac009c8b4140c9fcb1691870c8c6805c39a719be78c7590c1caaaae35533ab0"
+      "bytes": 747259,
+      "sha256": "65dc328ca494fba99cd918315d3797c80bc092810fbbcaa89d1e8c1e16cefebd"
     }
   ]
 }
