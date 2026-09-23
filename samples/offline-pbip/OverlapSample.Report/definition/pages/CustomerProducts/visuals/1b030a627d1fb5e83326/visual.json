@@ -19,10 +19,49 @@
               {
                 "textRuns": [
                   {
+                    "value": "ROLE BINDING: Map distinct entity values to 'Entity ID', set categories to 'Set Name', and optional measure to 'Highlight signal'.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12px",
+                      "color": "#172B4D"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "CONTEXT MENU: Right-click visual empty space (header, footer, background) to open the native visual context menu; right-click any combination bar or set row for data-point actions.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12px",
+                      "color": "#172B4D"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "INTERACTIONS: Click any combination bar or set row to select/cross-filter; Ctrl/Cmd-click for multi-select; press Escape or click Clear to reset selection.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12px",
+                      "color": "#172B4D"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
                     "value": "CHECK: 10 entities; Atlas 6 / Beacon 5 / Cove 4; no retained memberships 1. Duplicate C001 / Atlas counts once.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15px",
+                      "fontSize": "12px",
                       "color": "#172B4D"
                     }
                   }
@@ -35,7 +74,7 @@
                     "value": "EXACT (default): Atlas + Beacon only = 2. INCLUSIVE: switch Inclusive intersections on to include supersets = 3. Inclusive bars overlap; never sum them as a universe.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15px",
+                      "fontSize": "12px",
                       "color": "#172B4D"
                     }
                   }
@@ -48,7 +87,7 @@
                     "value": "PROJECTION: set Maximum retained sets to 2. Atlas + Beacon = 3, none = 2; universe stays 10. Omitted sets change what exact means.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15px",
+                      "fontSize": "12px",
                       "color": "#172B4D"
                     }
                   }
@@ -61,7 +100,7 @@
                     "value": "PARTIAL IS NOT COMPLETE: a partial-data warning means counts describe only received rows. Top/minimum hide combinations; they do not redefine the observed universe.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15px",
+                      "fontSize": "12px",
                       "color": "#172B4D"
                     }
                   }
@@ -74,7 +113,7 @@
                     "value": "HOST CHECK: chart → explorer requests Highlight; table → explorer filters. Selection identities, highlighting, refresh, and rendering still require real Desktop validation.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "15px",
+                      "fontSize": "12px",
                       "color": "#172B4D"
                     }
                   }

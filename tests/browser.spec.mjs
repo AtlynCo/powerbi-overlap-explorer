@@ -297,11 +297,31 @@ test("row limit and unknown unloaded totals are visible", async ({ page }) => {
 
 test("right-clicking header, footer or background opens context menu with empty identity (Policy 1180.2.5)", async ({ page }) => {
   await mount(page);
+  // True blank canvas before update:
+  await page.locator("#host").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+
+  // Blank canvas with onboarding state:
+  await update(page, [], { noViews: true });
+  await page.locator(".onboarding").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+
+  // Populated canvas:
   await update(page, rows);
   await page.locator("header").click({ button: "right" });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
   await page.locator("footer").click({ button: "right" });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+  await page.locator(".summary").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+  await page.locator(".chart-scroll").click({ button: "right", position: { x: 800, y: 50 } });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
   await page.locator(".atlyn-overlap").click({ button: "right", position: { x: 5, y: 5 } });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+
+  // Detail overlay empty space:
+  await page.locator(".combination").first().click();
+  await expect(page.locator(".details")).toBeVisible();
+  await page.locator(".details").click({ button: "right", position: { x: 10, y: 10 } });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
 });
