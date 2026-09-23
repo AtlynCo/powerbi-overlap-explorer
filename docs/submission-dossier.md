@@ -24,16 +24,16 @@ a probe PBIX. Final native/PBIX acceptance and assets remain parent-owned.
 | --- | --- |
 | Public visual name | **Atlyn Overlap Explorer** |
 | Author / public contact | **Atlyn** / **atlyn.help@gmail.com** — coordinator-verified metadata |
-| Public support URL | **https://www.atlynco.com/docs/faq** — coordinator-verified channel; owner must validate public availability and responsiveness |
+| Public support URL | **https://atlynco.github.io/atlyn-powerbi-support/docs/faq/** — coordinator-verified channel; public support documentation |
 | Repository metadata | `https://github.com/AtlynCo/powerbi-overlap-explorer`; not a substitute for public customer support; reviewer access remains owner-controlled |
-| Package version / GUID | Reviewed candidate `1.0.0.0` / `AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`; final archive must agree |
+| Package version / GUID | Candidate `1.0.1.0` / `AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`; final archive must agree |
 | API | SDK npm 5.11.1 / manifest API 5.11.0; record final actual values |
 | Publisher legal entity/account/authority | **OWNER DECISION / VERIFICATION REQUIRED** |
 | Source and distribution license | **No first-party LICENSE/LICENCE file, package `license` field or SPDX identifier declared**; no terms invented or inferred from dependencies |
-| Product EULA / standard contract selection | **OWNER LEGAL APPROVAL REQUIRED** |
-| Public HTTPS privacy policy | **OWNER APPROVAL AND URL REQUIRED** |
-| Acquisition model | **APPROVED:** existing Atlyn storefront subscriptions, outside the visual |
-| Runtime / shared viewing | **APPROVED:** ungated authors/viewers, free shared viewing, no paid-author identity verification or licence calls |
+| Product EULA / standard contract selection | Terms at **https://atlynco.github.io/atlyn-powerbi-support/legal/terms/**; author acquisition via Atlyn all-access subscription |
+| Public HTTPS privacy policy | **https://atlynco.github.io/atlyn-powerbi-support/legal/privacy/** |
+| Acquisition model | **APPROVED:** Atlyn all-access subscription required for authoring/use; shared viewers require no separate subscription |
+| Runtime / shared viewing | **APPROVED:** ungated runtime (no key/license checks), free shared viewing |
 | Prices / contract details / availability markets | Use owner-supplied existing terms; no amounts, tiers, SLA or refund clauses invented |
 | Certification target | **OWNER REQUIRED:** official **Power BI certified** designation via Partner Center's **Request Power BI certification** checkbox; **NOT SUBMITTED / NOT GRANTED** |
 
