@@ -160,18 +160,20 @@ authoring and validation scripts read the visual GUID/version from
 `pbiviz.json`; the package validator checks the configured support URL.
 
 `npm ci` passed and did not alter the lockfile after the coordinated version
-update. `npm run check` passed with 61 unit and 31 packaged-browser tests,
+update. `npm run check` passed with 61 unit and 32 packaged-browser tests,
 typecheck, ESLint, package external-request audit/structure checks, and
 local-policy checks. `npm run audit` reported zero vulnerabilities. The final
 production `npm run package` artifact is
 `AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.1.0.2.0.pbiviz`,
 SHA-256
-`cffb88570ff2a92b792fdd2a50681694a59fe4aaaa69ef92500f3982f014415a`.
+`3a78a2e7c241cb59261d5a1c82b7fd476873c4954c74e59a0eed0e5892569054`.
 `npm run prepare:sample` followed by
-`npm run validate:sample -- --offline --evidence-dir .tmp/release-evidence/overlap-1-0-2-final`
-passed: 20 definitions schema-validated, two authored pages / 12 visuals,
-bindings and sample data checks pass, and the embedded archive hash exactly
-matches the final PBIVIZ.
+`npm run validate:sample -- --offline` passed: 20 definitions
+schema-validated, two authored pages / 12 visuals, bindings and sample data
+checks pass, and the embedded archive SHA-256
+`3a78a2e7c241cb59261d5a1c82b7fd476873c4954c74e59a0eed0e5892569054` exactly
+matches the final PBIVIZ. The certification package validator also confirms
+the configured support URL is the verified fallback.
 
 The genuine PBIX
 `C:\pbicert\reviewer-native-check-2026-09-29\Overlap-1.0.1.0-check.pbix`

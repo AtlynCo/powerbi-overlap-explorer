@@ -116,10 +116,14 @@ export function authoredPage(fixture) {
       objects: { columnHeaders: properties({ autoSizeColumnWidth: literal(true), columnAdjustment: literal("growToFit") }) },
       visualContainerObjects: titled("Membership rows / highlight signal (not weights)"),
     }),
-    textbox(page, "guide", [...notes,
+    textbox(page, "guide", [
+      "ROLE BINDING: Map distinct entity values to 'Entity ID', set categories to 'Set Name', and optional measure to 'Highlight signal'.",
+      "CONTEXT MENU: Right-click visual empty space (header, footer, background) to open the native visual context menu; right-click any combination bar or set row for data-point actions.",
+      "INTERACTIONS: Click any combination bar or set row to select/cross-filter; Ctrl/Cmd-click for multi-select; press Escape or click Clear to reset selection.",
+      ...notes,
       "PARTIAL IS NOT COMPLETE: a partial-data warning means counts describe only received rows. Top/minimum hide combinations; they do not redefine the observed universe.",
       "HOST CHECK: chart → explorer requests Highlight; table → explorer filters. Selection identities, highlighting, refresh, and rendering still require real Desktop validation.",
-    ], 640, 236, 936, 15, 5),
+    ], 640, 236, 936, 12, 5),
   ];
   return {
     page: {

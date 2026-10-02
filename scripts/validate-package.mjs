@@ -13,6 +13,7 @@ assert.equal(resource.apiVersion, "5.11.0");
 assert.equal(resource.apiVersion, config.apiVersion);
 assert.deepEqual(resource.capabilities.privileges, []);
 assert.deepEqual(resource.capabilities.dataRoles, capabilities.dataRoles);
+assert.equal(config.visual.supportUrl, "https://atlynco.github.io/atlyn-powerbi-support/docs/faq/");
 assert.equal(resource.visual.supportUrl, config.visual.supportUrl);
 assert.equal(resource.author.email, "atlyn.help@gmail.com");
 assert.equal(metadata.version, config.visual.version);

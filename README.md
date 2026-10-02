@@ -5,12 +5,13 @@ intersection bars align with connected membership dots; the margin shows each
 retained set's distinct-entity size. Counting and geometry are original
 implementations, not an embedded or copied UpSet library.
 
-**Status:** version `1.0.0.0`, private source; not certified or submitted.
-The owner approved **existing Atlyn storefront subscriptions with an ungated
-runtime and free shared viewing**. Runtime licensing is not a blocker and
-there is no paid-author identity enforcement. The repository declares no
-first-party LICENSE file or SPDX identifier. Native validation, final PBIX acceptance,
-final assets and the coordinator's publication gate remain; see
+**Status:** version `1.0.2.0`, private source; not certified or submitted.
+Legal author acquisition and use requires an active paid or trial Atlyn
+all-access subscription; the visual source and runtime contain no key or
+license check, and shared viewers require no separate subscription.
+The repository declares no first-party LICENSE file or SPDX identifier.
+Native validation, final PBIX acceptance, final assets and the coordinator's
+publication gate remain; see
 [acquisition and runtime](docs/acquisition-and-runtime.md) and
 [release review](docs/release-review.md).
 
@@ -199,7 +200,7 @@ tenant behavior are outside this statement. This is a technical summary, not
 an owner-approved public privacy policy or license.
 
 The author is **Atlyn**. The support page is
-[Atlyn FAQ](https://www.atlynco.com/docs/faq), and the contact address is
+[Atlyn FAQ](https://atlynco.github.io/atlyn-powerbi-support/docs/faq/), and the contact address is
 [atlyn.help@gmail.com](mailto:atlyn.help@gmail.com). These metadata values were
 confirmed from existing Atlyn sources; the owner must verify page availability
 and contact responsiveness before publication.

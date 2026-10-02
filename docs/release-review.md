@@ -45,7 +45,7 @@ committed source to these qualified local artifacts; owner/native gates remain.
 ## Confirmed metadata
 
 Author **Atlyn**, contact **atlyn.help@gmail.com**, public support
-**https://www.atlynco.com/docs/faq** are coordinator-verified values reflected
+**https://atlynco.github.io/atlyn-powerbi-support/docs/faq/** are coordinator-verified values reflected
 in `pbiviz.json`. They are not placeholders or unresolved channel choices.
 The owner must still verify public page availability, adequate visual-specific
 support content, and contact responsiveness. A private issue tracker is not

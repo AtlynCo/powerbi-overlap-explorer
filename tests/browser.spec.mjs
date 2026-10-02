@@ -297,11 +297,91 @@ test("row limit and unknown unloaded totals are visible", async ({ page }) => {
 
 test("right-clicking header, footer or background opens context menu with empty identity (Policy 1180.2.5)", async ({ page }) => {
   await mount(page);
+  // True blank canvas before update:
+  await page.locator("#host").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+
+  // Blank canvas with onboarding state:
+  await update(page, [], { noViews: true });
+  await page.locator(".onboarding").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+
+  // Populated canvas:
   await update(page, rows);
   await page.locator("header").click({ button: "right" });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
   await page.locator("footer").click({ button: "right" });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+  await page.locator(".summary").click({ button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+  await page.locator(".chart-scroll").click({ button: "right", position: { x: 800, y: 50 } });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
   await page.locator(".atlyn-overlap").click({ button: "right", position: { x: 5, y: 5 } });
   expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+
+  // Detail overlay empty space:
+  await page.locator(".combination").first().click();
+  await expect(page.locator(".details")).toBeVisible();
+  await page.locator(".details").click({ button: "right", position: { x: 10, y: 10 } });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({ key: undefined, id: {} });
+});
+
+test("real page.mouse right-clicks at blank coordinates invoke context menu with empty identity on both pages (Policy 1180.2.5 hit-testing)", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await mount(page);
+
+  // Oversized viewport geometry with short sample content: verify hit-testing across blank header, summary, chart gap, bottom background, and footer
+  const customerRows = [
+    ["C001", "Atlas"], ["C001", "Beacon"], ["C001", "Atlas"], ["C002", "Atlas"],
+    ["C003", "Beacon"], ["C003", "Cove"], ["C004", "Atlas"], ["C004", "Beacon"], ["C004", "Cove"],
+    ["C005", "Cove"], ["C006", "Atlas"], ["C006", "Cove"], ["C007", "Beacon"],
+    ["C008", null], ["C009", "Atlas"], ["C009", null], ["C010", "Atlas"], ["C010", "Beacon"]
+  ];
+  await update(page, customerRows, { width: 1440, height: 900 });
+
+  await page.mouse.click(500, 25, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 500, y: 25 }
+  });
+
+  await page.mouse.click(800, 60, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 800, y: 60 }
+  });
+
+  await page.mouse.click(1200, 300, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 1200, y: 300 }
+  });
+
+  await page.mouse.click(700, 850, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 700, y: 850 }
+  });
+
+  await page.mouse.click(200, 880, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 200, y: 880 }
+  });
+
+  // Page 2: Feature adoption overlap in oversized viewport
+  const featureRows = [
+    ["U001", "Search"], ["U001", "Share"], ["U002", "Search"], ["U003", "Share"],
+    ["U003", "Automate"], ["U004", "Search"], ["U004", "Share"], ["U004", "Automate"],
+    ["U005", "Automate"], ["U006", "Search"], ["U006", "Automate"], ["U007", "Share"],
+    ["U008", null], ["U009", "Search"], ["U009", "Search"], ["U010", "Search"],
+    ["U010", "Share"], ["U011", "Export"], ["U012", "Export"], ["U012", "Search"],
+    ["U012", "Share"], ["U012", "Automate"]
+  ];
+  await update(page, featureRows, { width: 1440, height: 900 });
+
+  await page.mouse.click(1200, 300, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 1200, y: 300 }
+  });
+
+  await page.mouse.click(700, 850, { button: "right" });
+  expect(await page.evaluate(() => window.calls.context.at(-1))).toMatchObject({
+    key: undefined, id: {}, point: { x: 700, y: 850 }
+  });
 });
