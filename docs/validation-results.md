@@ -149,3 +149,36 @@ version mismatch remains a release blocker. No Power BI Desktop session was
 started, and no native menu, graceful close, process-chain release or
 cold-reopen evidence was collected. Service, mobile, accessibility and export
 gates remain unverified; these local mock checks do not close them.
+
+## Candidate 1.0.2.0 package and PBIP sync, 2026-10-02
+
+Per the coordinator's approved next patch version, the source candidate now
+uses visual version `1.0.2.0`, root npm package version `1.0.2`, and the
+verified support fallback
+`https://atlynco.github.io/atlyn-powerbi-support/docs/faq/`. The sample
+authoring and validation scripts read the visual GUID/version from
+`pbiviz.json`; the package validator checks the configured support URL.
+
+`npm ci` passed and did not alter the lockfile after the coordinated version
+update. `npm run check` passed with 61 unit and 31 packaged-browser tests,
+typecheck, ESLint, package external-request audit/structure checks, and
+local-policy checks. `npm run audit` reported zero vulnerabilities. The final
+production `npm run package` artifact is
+`AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.1.0.2.0.pbiviz`,
+SHA-256
+`cffb88570ff2a92b792fdd2a50681694a59fe4aaaa69ef92500f3982f014415a`.
+`npm run prepare:sample` followed by
+`npm run validate:sample -- --offline --evidence-dir .tmp/release-evidence/overlap-1-0-2-final`
+passed: 20 definitions schema-validated, two authored pages / 12 visuals,
+bindings and sample data checks pass, and the embedded archive hash exactly
+matches the final PBIVIZ.
+
+The genuine PBIX
+`C:\pbicert\reviewer-native-check-2026-09-29\Overlap-1.0.1.0-check.pbix`
+remains an immutable historical probe at SHA-256
+`e5e27f89fd9d2d9a59c09207863b41aeb88467aca0c2ecaf1815400692e829ec`.
+It is version `1.0.1.0`, not the current candidate, and is not the final
+sample. A genuine Desktop-saved `1.0.2.0` PBIX, offline reopen, and native
+semantic/menu acceptance remain blocked/pending coordinator-owned Desktop
+access. No Desktop was launched or closed in this pass; source/PBIP checks do
+not close those native gates.
