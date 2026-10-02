@@ -6,7 +6,7 @@ import { parseArgs } from "node:util";
 import Ajv from "ajv";
 import { readPackage } from "./read-package.mjs";
 import { authoredPage, fixtures, packageFiles, reportArtifactVersion, reportDefinitionVersion,
-  reportRoot, sampleRoot, sha256, visualGuid } from "./prepare-sample.mjs";
+  reportRoot, sampleRoot, sha256, visualGuid, visualVersion } from "./prepare-sample.mjs";
 
 const readJson = async file => JSON.parse(await readFile(file, "utf8"));
 const cacheRoot = path.join(sampleRoot, ".schema-cache");
@@ -144,7 +144,7 @@ async function validatePackage(embeddedOnly) {
   const packaged = await readPackage(path.join(sampleRoot, ...manifest.archive.split("/")));
   assert.equal(sha256(packaged.bytes), manifest.sha256, "Embedded archive SHA256 mismatch");
   assert.equal(packaged.bytes.length, manifest.bytes);
-  assert.equal(manifest.visualVersion, "1.0.0.0");
+  assert.equal(manifest.visualVersion, visualVersion);
   assert.equal(manifest.apiVersion, "5.11.0");
   assert.equal(manifest.sdkVersion, "5.11.1");
   const files = await packageFiles(packaged);

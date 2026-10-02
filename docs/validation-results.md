@@ -117,3 +117,35 @@ in these local results authorizes submission or release. See
 [acquisition/runtime](acquisition-and-runtime.md),
 [manual validation](manual-validation.md),
 [release review](release-review.md) and [submission dossier](submission-dossier.md).
+
+## Isolated sample-sync branch recheck, 2026-10-02
+
+On `garrett-hamers-certification-sample-sync` at the pre-sync branch revision,
+`npm ci` succeeded with Node 24.17.0 / npm 11.13.0. The full dependency audit
+initially found four fixable transitive development-dependency advisories
+(one high, three moderate). `npm audit fix` updated only `package-lock.json`;
+the final `npm run audit` reported zero vulnerabilities. The documented
+`npm run package` build produced the same uncompressed package members as the
+preserved local package. Its ZIP hash varied between build runs, so no rebuilt
+archive was substituted for the saved artifact.
+
+After the clean install and sample-script correction, `npm run check` passed:
+61 unit tests, 31 packaged-browser tests, typecheck, the explicit ESLint
+command, package certification audit (no external requests), package
+structure assertions and local-policy checks. `npm run test:layouts` captured
+10 normal/dense viewport combinations plus scroll/contrast/RTL evidence;
+`npm run benchmark` completed customer, dense-exact, bounded-inclusive and
+700-identity selection mock cases. `npm run validate:sample -- --embedded-only
+--offline` intentionally failed its version-parity assertion: the preserved
+sample manifest says `1.0.0.0`, while `pbiviz.json` and the current package say
+`1.0.1.0`. The offline schema/binding check passed before making the parity
+assertion dynamic; it was an embedded-snapshot check, not a current-package
+parity pass.
+
+To honor the instruction to preserve sample/release bytes, the PBIP payload,
+embedded archive and existing `dist` files were restored unchanged after
+build checks; their before/after hashes matched. This branch's sample/package
+version mismatch remains a release blocker. No Power BI Desktop session was
+started, and no native menu, graceful close, process-chain release or
+cold-reopen evidence was collected. Service, mobile, accessibility and export
+gates remain unverified; these local mock checks do not close them.
