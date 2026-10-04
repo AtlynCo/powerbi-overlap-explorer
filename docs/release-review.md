@@ -2,6 +2,39 @@
 
 Local engineering review prepared **2026-09-09**; owner-model update **2026-09-10**.
 
+## PR #5 candidate recheck, 2026-10-04
+
+The current candidate is **1.0.2.0**, GUID
+`AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`, on draft PR #5,
+head `13ce5f733385361db35f9da88f7fd954b399b7f3`, based on `certification`
+at `8320d6309cd355e03038718bb82fead519e29853`. The checked-out branch was
+clean before rebuilding. The PR includes the merged empty-space context-menu
+hit-test coverage, corrected support URL, and source-managed sample updates.
+The tested PBIVIZ and PBIP hashes, command results, and current blockers are
+recorded in [validation results](validation-results.md#current-pr-5-candidate-recheck-2026-10-04).
+
+The current lock uses `powerbi-visuals-tools` 7.2.1 and npm API package 5.11.1;
+the latter correctly emits host metadata API 5.11.0. The configured Microsoft
+npm registry reports Tools 7.2.1 as latest and API 5.11.1 as latest; Tools
+7.2.2 is unavailable there. The required full development-dependency audit
+currently **fails**: one root advisory, GHSA-vfj7-8cjw-p6xm, affects six
+dependency nodes at high severity. `braces` 3.0.3 is the latest published
+version and is within the advisory range; 3.0.4 is unavailable. npm's only
+offered fix is a breaking Tools downgrade to 1.7.2. No unsafe override,
+suppression, or downgrade was applied.
+
+No candidate-version `.pbix` exists in this worktree. The source-managed PBIP
+and packaged visual pass offline/schema/resource checks, but are not evidence
+of a genuine Desktop-saved report. A current-version native PBIX, native
+open/refresh/save/reopen and semantic acceptance remain outstanding. The
+repository is private; reviewer source access and any associated owner
+authorization remain coordinator-owned and were not changed here. The
+coordinator reports current OSDC1033 read access confirmed across all eight
+repositories and that the support/legal pages currently work.
+The frozen lowercase `certification` ref remains at the base commit above; this
+draft PR has not been merged, so that protected source branch does not yet
+contain the 1.0.2.0 candidate.
+
 ## Current decision
 
 **HOLD for the coordinator's final native/assets/publication gate.**
@@ -18,14 +51,14 @@ merge does not authorize further main/ref changes, merges or submission.
 This follow-up also corrects the sample's report-definition version to
 `2.0.0` while preserving artifact `4.0`, based on the coordinator's native A/B.
 It does not change the renderer or frozen bundles.
-The final package SHA-256 is
+The historical release-quality package SHA-256 was
 `ae2f1c09694fb5cade37bd1bbe30c18d212e8920f7f9a9cadd33a0234f9cebf0`.
 The release seal records the final full source commit and archive/file hashes.
 Repository Actions was disabled by the coordinator (`enabled=false`);
 this release uses **local validation only**, not hosted CI, cloud coding,
 Codespaces, workflow badges or historical hosted results.
 
-### Coordinator-reported local progress
+### Historical coordinator-reported local progress
 
 The final **local** `npm run check:release` passed: strict typecheck,
 Microsoft-plugin ESLint, **47 unit tests**, **30 packaged-browser tests**,
@@ -51,9 +84,11 @@ The owner must still verify public page availability, adequate visual-specific
 support content, and contact responsiveness. A private issue tracker is not
 the public support channel.
 
-Reviewed candidate metadata is version `1.0.0.0`, GUID
+The original review candidate metadata was version `1.0.0.0`, GUID
 `AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42`; SDK npm package
-5.11.1 exposes API contract 5.11.0. Verify these against the final archive.
+5.11.1 exposes API contract 5.11.0. The current PR #5 candidate is version
+`1.0.2.0`; see the recheck above and current archive evidence in
+`validation-results.md`.
 Acquisition and ungated runtime are owner-approved. The repository still has
 no first-party LICENSE/LICENCE file or `package.json` license identifier;
 applicable existing terms and public-policy references belong in the owner's
@@ -69,14 +104,14 @@ failure. Do not close a native or owner gate with an automated local check.
 | B01 | First-party terms and provenance record | Product owner/legal | Applicable existing terms and dependency notice review; no invented relicensing | **NO FIRST-PARTY IDENTIFIER/TERMS DECLARED IN REPO**; not a runtime integration task |
 | B02 | Acquisition/runtime model and listing paperwork | Product owner/legal | Existing storefront subscription acquisition, ungated shared viewing, applicable EULA/privacy/disclosures | **ACQUISITION/RUNTIME APPROVED**; publication documents remain for the parent gate, not licensing-code implementation |
 | B03 | Publisher authority and public support; blocks submission | Publisher owner | Authorized account/legal entity; working public support and responsive contact; secure reviewer-access plan | **PENDING**; metadata verified, responsiveness/account authority not established |
-| B04 | Final local correctness and failure-state proof | Engineering coordinator | Final revision-linked type/lint/unit/package/Chromium host-mock logs, all intentional limits and adversarial/selection/lifecycle cases | **LOCAL PASS**: 47 unit / 30 packaged-browser cases; source-linked release seal |
-| B05 | Certification build/repository/audit compliance | Engineering coordinator | Current latest API/tools review; required commands/files/plugin config; no moderate/high audit warnings; safe source/bundle; exact rebuild/package correspondence | **LOCAL PASS**: explicit `eslint`, current reviewed SDK/tools, documented custom package path, zero audit vulnerabilities; Microsoft approval not implied |
+| B04 | Final local correctness and failure-state proof | Engineering coordinator | Final revision-linked type/lint/unit/package/Chromium host-mock logs, all intentional limits and adversarial/selection/lifecycle cases | **CURRENT PR #5 LOCAL PASS**: typecheck, ESLint, 61 unit / 32 packaged-browser tests and package checks; native behavior is not established |
+| B05 | Certification build/repository/audit compliance | Engineering coordinator | Current latest API/tools review; required commands/files/plugin config; no moderate/high audit warnings; safe source/bundle; exact rebuild/package correspondence | **BLOCKED**: full audit reports six high-severity package findings rooted in GHSA-vfj7-8cjw-p6xm; latest compatible `braces` patch is unavailable. See current recheck above |
 | B06 | Native Desktop/service/core host behavior | Native validation coordinator | Actual N01–N13/N15 results in [certification instructions](certification-requirements.md), real identities/model/filtering/persistence, profiles and defects resolved | **INITIAL NATIVE PROBE ONLY**; version correction restored pages/refresh/customer rendering; full semantics and host matrix pending |
 | B07 | Mobile/touch/accessibility/export coverage | Native validation coordinator | N14/N16 outcomes on applicable supported hosts; tenant/certification restrictions honestly recorded; no false conformance/export claim | **NOT RUN** |
-| B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PASS / INITIAL NATIVE OPEN**: 20 definitions, two bound pages, exact embedded bytes; full both-page acceptance pending |
-| B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **PROBE PBIX SAVED: 168,742 bytes**; final hash/correspondence, offline reopen and semantic acceptance remain parent-owned |
+| B08 | Authored sample project acceptance | Engineering + native coordinator | Schema/binding/resource checks plus real Desktop open/refresh and both bound pages validated | **LOCAL PBIP PASS**: 20 definitions, two bound pages, exact embedded bytes; current candidate Desktop open/refresh and full both-page acceptance remain pending |
+| B09 | Mandatory offline sample PBIX | Native validation coordinator | Genuine Desktop-saved PBIX, offline reopen/refresh, same visual version/content as final PBIVIZ, hash and evidence | **BLOCKED**: no candidate-version PBIX in this worktree; historical 1.0.1.0 probe is not current-version parity evidence |
 | B10 | Listing icon/logo/screenshots | Asset + native coordinator | Original source/provenance; 20×20 icon; 300×300 logo; 1–5 native-backed listing PNGs at 1366×768 and ≤1024 KB; hashes, captions and review | **LOCAL ASSETS COMPLETE / NATIVE SCREENSHOTS PENDING**; local previews are host-mock labeled; no custom certification-badge asset is required |
-| B11 | Source/package/evidence integrity | Engineering coordinator | Immutable [dossier manifest](submission-dossier.md#immutable-evidence-manifest), final source/archive/package/input/media hashes and qualified evidence classes | Recorded by the clean-commit, write-once release seal; final location/hash accompanies the PR handoff |
+| B11 | Source/package/evidence integrity | Engineering coordinator | Immutable [dossier manifest](submission-dossier.md#immutable-evidence-manifest), final source/archive/package/input/media hashes and qualified evidence classes | **CANDIDATE HASHES RECORDED** in current validation results; no new immutable native-release seal or PBIX evidence exists |
 | B12 | Listing and certification handoff | Product/publisher + coordinator | Approved accurate listing/notes, resolved required gates, lowercase `certification` branch matching frozen package/source; explicit instruction to submit | **BLOCKED pending prior gates and owner authorization** |
 | B13 | Official Power BI certification, owner-required target | Microsoft + publisher | Authorized publisher selects **Request Power BI certification** at submission; Microsoft awards/displays the official badge after review/approval; retain the actual decision for this version | **REQUESTED BY OWNER; NOT SUBMITTED / NOT CERTIFIED** |
 

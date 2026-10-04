@@ -6,8 +6,8 @@
   "sdkVersion": "5.11.1",
   "sourcePackage": "AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.1.0.2.0.pbiviz",
   "archive": "package/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.pbiviz",
-  "bytes": 131405,
-  "sha256": "3a78a2e7c241cb59261d5a1c82b7fd476873c4954c74e59a0eed0e5892569054",
+  "bytes": 136021,
+  "sha256": "0434c6f986e16379b1b5f3d2cd1bfad8521092e729dbe78fcdc4bbf773989d34",
   "embeddedFiles": [
     {
       "path": "OverlapSample.Report/CustomVisuals/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42/package.json",
@@ -16,8 +16,8 @@
     },
     {
       "path": "OverlapSample.Report/CustomVisuals/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42/resources/AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.pbiviz.json",
-      "bytes": 747284,
-      "sha256": "0b355da5311b655aac67a62f4446a9382fdf1bb1388a672dae02e1b2764b96d0"
+      "bytes": 828546,
+      "sha256": "4c9499ab523a5f2643f5a883f4f789d9c08557d7795918ad7a44ee867cabf55a"
     }
   ]
 }

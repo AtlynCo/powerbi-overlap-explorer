@@ -184,3 +184,58 @@ sample. A genuine Desktop-saved `1.0.2.0` PBIX, offline reopen, and native
 semantic/menu acceptance remain blocked/pending coordinator-owned Desktop
 access. No Desktop was launched or closed in this pass; source/PBIP checks do
 not close those native gates.
+
+## Current PR #5 candidate recheck, 2026-10-04
+
+PR #5 is open/draft at head
+`13ce5f733385361db35f9da88f7fd954b399b7f3`, based on `certification`
+`8320d6309cd355e03038718bb82fead519e29853`. The isolated worktree was clean
+at that head before validation. The manifest and lockfile agree on Tools
+7.2.1 and API npm package 5.11.1; the package correctly advertises host API
+5.11.0. `npm view` against the configured Microsoft feed reported Tools
+7.2.1 and API 5.11.1 as latest; Tools 7.2.2 returned E404.
+
+`npm run check` passed on this candidate: strict typecheck, ESLint, 61 unit
+tests, packaging/certification audit (no external requests), package
+structure/policy assertions, 32 packaged-browser tests including empty-space
+context-menu hit tests, and local-policy checks. The built PBIVIZ is
+`dist\AtlynOverlapExplorerA83D5B49F72E4CA693D0C8260159BE42.1.0.2.0.pbiviz`,
+136,021 bytes, SHA-256
+`0434c6f986e16379b1b5f3d2cd1bfad8521092e729dbe78fcdc4bbf773989d34`.
+The explicit `npm run lint`, `npm run typecheck`, `npm run package`, and
+`npm run certification` commands also passed; the 32 browser tests were
+rerun against this final archive.
+After `npm run prepare:sample`, `npm run validate:sample -- --offline`
+passed: 20 JSON definitions, two bound pages / 12 authored visuals, model/CSV
+parity and exact embedded package/resource checks. The PBIP embedded archive
+has the same 136,021-byte length and SHA-256 as the PBIVIZ.
+The embedded resource JSON SHA-256 is
+`4c9499ab523a5f2643f5a883f4f789d9c08557d7795918ad7a44ee867cabf55a`.
+Repeated packaging changed the outer PBIVIZ SHA-256 while preserving the
+embedded resource checksum; use the exact artifact/hash above and regenerate
+the PBIP from that artifact before any native save.
+
+The full audit requirement is **not met**. `npm audit --package-lock-only
+--json` and `npm run audit` both report six high-severity affected package
+nodes (zero moderate/critical/low/info), across prod 7, dev 607, optional 41,
+total 614 dependency records. All six findings trace to one distinct advisory,
+GHSA-vfj7-8cjw-p6xm: `braces` stack-exhaustion DoS, CVSS 7.5, affected range
+`<=3.0.3`. npm's only offered automatic fix is a breaking downgrade of
+`powerbi-visuals-tools` to 1.7.2. Registry metadata reports `braces` 3.0.3
+latest and 3.0.4 absent; no compatible published fix is available. No
+override, suppression, forced downgrade, or dependency/source workaround was
+applied. The existing 2026-10-02 zero-vulnerability audit result is historical
+and is superseded for this current dependency snapshot.
+
+There is no `.pbix` file in the worktree. The only current sample artifact is
+the PBIP; it is not a native Desktop save. The external 1.0.1.0 probe is
+historical and does not establish current 1.0.2.0 parity. Desktop open,
+refresh, native context-menu behavior, save/reopen, and native semantic
+acceptance were not performed. This GitHub repository is private; the
+coordinator reports current OSDC1033 read access confirmed across all eight
+repositories and that support/legal pages currently work. No Desktop, Partner
+Center, permission, publication, merge, or protected-ref action was taken.
+The local fixtures are the repository's authored customer/product and feature
+adoption datasets; no validation against Microsoft's separately linked
+certification sample report is recorded. The frozen `certification` branch
+also remains at the PR base and does not yet carry this candidate.
