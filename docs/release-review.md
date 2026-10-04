@@ -22,15 +22,17 @@ dependency nodes at high severity. `braces` 3.0.3 is the latest published
 version and is within the advisory range; 3.0.4 is unavailable. npm's only
 offered fix is a breaking Tools downgrade to 1.7.2. No unsafe override,
 suppression, or downgrade was applied.
+GitHub's advisory record lists `first_patched_version: null` (coordinator
+verified, updated 2026-10-02); this is an unresolved upstream advisory, not a
+missed compatible version bump.
 
 No candidate-version `.pbix` exists in this worktree. The source-managed PBIP
 and packaged visual pass offline/schema/resource checks, but are not evidence
 of a genuine Desktop-saved report. A current-version native PBIX, native
 open/refresh/save/reopen and semantic acceptance remain outstanding. The
-repository is private; reviewer source access and any associated owner
-authorization remain coordinator-owned and were not changed here. The
-coordinator reports current OSDC1033 read access confirmed across all eight
-repositories and that the support/legal pages currently work.
+repository is private. The coordinator reports that read access for both
+OSDC1033 and `pbicvsupport` is confirmed on all eight repositories and that
+the support/legal pages currently work. No permission change was made here.
 The frozen lowercase `certification` ref remains at the base commit above; this
 draft PR has not been merged, so that protected source branch does not yet
 contain the 1.0.2.0 candidate.

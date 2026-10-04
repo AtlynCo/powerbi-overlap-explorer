@@ -222,19 +222,22 @@ total 614 dependency records. All six findings trace to one distinct advisory,
 GHSA-vfj7-8cjw-p6xm: `braces` stack-exhaustion DoS, CVSS 7.5, affected range
 `<=3.0.3`. npm's only offered automatic fix is a breaking downgrade of
 `powerbi-visuals-tools` to 1.7.2. Registry metadata reports `braces` 3.0.3
-latest and 3.0.4 absent; no compatible published fix is available. No
-override, suppression, forced downgrade, or dependency/source workaround was
-applied. The existing 2026-10-02 zero-vulnerability audit result is historical
-and is superseded for this current dependency snapshot.
+latest and 3.0.4 absent. GitHub's advisory record reports
+`first_patched_version: null` (coordinator verified, updated 2026-10-02);
+there is no patched version published. No override, suppression, forced
+downgrade, or dependency/source workaround was applied. The existing
+2026-10-02 zero-vulnerability audit result is historical and is superseded
+for this current dependency snapshot.
 
 There is no `.pbix` file in the worktree. The only current sample artifact is
 the PBIP; it is not a native Desktop save. The external 1.0.1.0 probe is
 historical and does not establish current 1.0.2.0 parity. Desktop open,
 refresh, native context-menu behavior, save/reopen, and native semantic
 acceptance were not performed. This GitHub repository is private; the
-coordinator reports current OSDC1033 read access confirmed across all eight
-repositories and that support/legal pages currently work. No Desktop, Partner
-Center, permission, publication, merge, or protected-ref action was taken.
+coordinator reports read access confirmed for both OSDC1033 and `pbicvsupport`
+across all eight repositories and that support/legal pages currently work.
+No permission change was made. No Desktop, Partner Center, publication,
+merge, or protected-ref action was taken.
 The local fixtures are the repository's authored customer/product and feature
 adoption datasets; no validation against Microsoft's separately linked
 certification sample report is recorded. The frozen `certification` branch
